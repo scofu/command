@@ -7,7 +7,7 @@ import com.google.inject.Scopes;
 import com.google.inject.Stage;
 import com.scofu.app.Service;
 import com.scofu.app.bootstrap.BootstrapModule;
-import com.scofu.command.model.Discoverable;
+import com.scofu.command.model.Identified;
 import com.scofu.command.target.Escapable;
 import org.junit.jupiter.api.Test;
 
@@ -32,7 +32,7 @@ public class EscapableTest extends Service {
     assertEquals("hello, world!", greeting);
   }
 
-  @Discoverable(identifier = "greet")
+  @Identified(value = "greet")
   String format(@Escapable String greeting) {
     return greeting.formatted("world");
   }

@@ -11,17 +11,17 @@ import java.lang.reflect.Method;
 /**
  * Methods annotated with this can be discovered by {@link TransformingNodeDiscoverer}.
  */
-@Target(ElementType.METHOD)
+@Target({ElementType.METHOD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
-@Repeatable(Discoverables.class)
-public @interface Discoverable {
+@Repeatable(MultiIdentified.class)
+public @interface Identified {
 
   Identifier<Method> METHOD_IDENTIFIER = Identifier.of("discovered_method");
 
   /**
    * Returns the identifier.
    */
-  String identifier();
+  String value();
 
   /**
    * Returns the alises.

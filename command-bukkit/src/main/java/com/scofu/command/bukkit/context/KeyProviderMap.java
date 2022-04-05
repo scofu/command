@@ -13,8 +13,8 @@ import org.bukkit.command.CommandSender;
 /**
  * A concurrent dynamic map of key providers.
  */
-public class KeyProviderMap
-    extends ConcurrentDynamicMap<CommandSender, KeyProvider<? super CommandSender>> {
+public class KeyProviderMap extends
+    ConcurrentDynamicMap<CommandSender, KeyProvider<? super CommandSender>> {
 
   private final Map<UUID, CommandSenderContext> cache;
   private final HelpMessageGenerator helpMessageGenerator;
@@ -33,8 +33,8 @@ public class KeyProviderMap
    */
   public Optional<CommandSenderContext> getOrCreateContext(CommandSender commandSender,
       Locale locale) {
-    return get(commandSender).map(keyProvider -> keyProvider.provide(commandSender))
-        .map(uuid -> cache.computeIfAbsent(uuid,
+    return get(commandSender).map(keyProvider -> keyProvider.provide(commandSender)).map(
+        uuid -> cache.computeIfAbsent(uuid,
             unused -> new CommandSenderContext(helpMessageGenerator, commandSender, locale)));
   }
 

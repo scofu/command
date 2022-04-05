@@ -6,15 +6,15 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Used to stack discoverable annotations.
+ * Used to stack identified annotations.
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Discoverables {
+public @interface MultiIdentified {
 
   /**
-   * Returns the discoverable annotations.
+   * Returns the identified annotations.
    */
-  Discoverable[] value();
+  Identified[] value();
 
 }

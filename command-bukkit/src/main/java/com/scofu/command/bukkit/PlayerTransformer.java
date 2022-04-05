@@ -102,8 +102,8 @@ public class PlayerTransformer implements Transformer<Player> {
   private Result<Player> makeSureExistsAndVisible(String string, Context context,
       Parameter<Player> parameter, Player player, String translation) {
     if (player == null || (context instanceof CommandSenderContext commandSenderContext
-        && commandSenderContext.commandSender() instanceof Player sender
-        && !sender.canSee(player))) {
+        && commandSenderContext.commandSender() instanceof Player sender && !sender.canSee(
+        player))) {
       return Result.error(
           new ParameterArgumentException(translatable(translation, text(string)), parameter));
     }

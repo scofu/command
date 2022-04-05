@@ -8,10 +8,9 @@ import com.scofu.app.Service;
 import com.scofu.app.bootstrap.BootstrapModule;
 import com.scofu.command.Context;
 import com.scofu.command.Dispatcher;
-import com.scofu.command.model.Discoverable;
+import com.scofu.command.model.Identified;
 import java.util.List;
 import java.util.Locale;
-import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -38,12 +37,12 @@ public class EnumTest extends Service {
     assertEquals(List.of("cat", "dog", "dog"), suggestions.toList());
   }
 
-  @Discoverable(identifier = "favorite")
+  @Identified(value = "favorite")
   String describeAnimal(Animal animal) {
     return "My favorite animal is %s.".formatted(animal.name().toLowerCase(Locale.ROOT));
   }
 
-  @Discoverable(identifier = "favorite dog")
+  @Identified(value = "favorite dog")
   String overridden() {
     return "overridden";
   }

@@ -35,13 +35,10 @@ public class CommandBukkitModule extends AbstractFeatureModule {
     bindFeature(ConsoleKeyProvider.class).in(Scopes.SINGLETON);
     bindFeature(BlockCommandKeyProvider.class).in(Scopes.SINGLETON);
 
-    Multibinder.newSetBinder(binder(), DiscoveryListener.class)
-        .addBinding()
-        .to(ForwardingDiscoveryListener.class)
-        .in(Scopes.SINGLETON);
+    Multibinder.newSetBinder(binder(), DiscoveryListener.class).addBinding()
+        .to(ForwardingDiscoveryListener.class).in(Scopes.SINGLETON);
 
-    OptionalBinder.newOptionalBinder(binder(), HelpMessageConfiguration.class)
-        .setBinding()
+    OptionalBinder.newOptionalBinder(binder(), HelpMessageConfiguration.class).setBinding()
         .toProvider(() -> HelpMessageConfiguration.builder().withCommandPrefix("/").build())
         .in(Scopes.SINGLETON);
   }

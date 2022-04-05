@@ -54,7 +54,7 @@ public class TransformingNodeDiscoverer {
 
   /**
    * Iterates over all methods declared in the given class and registers nodes from methods
-   * annotated with {@link  Discoverable}.
+   * annotated with {@link  Identified}.
    *
    * @param type     the type
    * @param instance the instance
@@ -62,13 +62,11 @@ public class TransformingNodeDiscoverer {
    */
   public <T> List<? extends Node<?, ?>> exploreAndRegister(Class<? extends T> type,
       @Nullable T instance) {
-    return Stream.of(type.getDeclaredMethods())
-        .peek(method -> method.setAccessible(true))
-        .filter(((Predicate<Method>) method -> method.isAnnotationPresent(Discoverable.class)).or(
-            method -> method.isAnnotationPresent(Discoverables.class)))
-        .flatMap(method -> Stream.of(method.getAnnotationsByType(Discoverable.class))
-            .map(discoverable -> fromMethod(method, instance, discoverable)))
-        .toList();
+    return Stream.of(type.getDeclaredMethods()).peek(method -> method.setAccessible(true)).filter(
+        ((Predicate<Method>) method -> method.isAnnotationPresent(Identified.class)).or(
+            method -> method.isAnnotationPresent(MultiIdentified.class))).flatMap(
+        method -> Stream.of(method.getAnnotationsByType(Identified.class))
+            .map(discoverable -> fromMethod(method, instance, discoverable))).toList();
   }
 
   /**
@@ -81,19 +79,18 @@ public class TransformingNodeDiscoverer {
   /**
    * Creates and returns a transforming node from the given method.
    *
-   * @param method       the method
-   * @param instance     the instance
-   * @param discoverable the discoverable
-   * @param <T>          the type of the instance
+   * @param method     the method
+   * @param instance   the instance
+   * @param identified the discoverable
+   * @param <T>        the type of the instance
    */
-  public <T> Node<?, ?> fromMethod(Method method, @Nullable T instance, Discoverable discoverable) {
-    final var path = discoverable.identifier().split(" ");
+  public <T> Node<?, ?> fromMethod(Method method, @Nullable T instance, Identified identified) {
+    final var path = identified.value().split(" ");
     final var identifier = Identifier.of(path[path.length - 1]);
     final var fullyQualifiedIdentifier = Identifier.of(String.join(" ", path));
-    final var aliases = Stream.of(discoverable.aliases())
-        .map(Identifier::of)
+    final var aliases = Stream.of(identified.aliases()).map(Identifier::of)
         .toArray(Identifier<?>[]::new);
-    final var node = convertToNode(method, instance, discoverable, identifier, aliases);
+    final var node = convertToNode(method, instance, identified, identifier, aliases);
 
     cache.put(fullyQualifiedIdentifier, node);
     Optional.ofNullable(waitingForParents.remove(fullyQualifiedIdentifier))
@@ -134,31 +131,22 @@ public class TransformingNodeDiscoverer {
     return node;
   }
 
-  private <T> Node<?, ?> convertToNode(Method method, T instance, Discoverable discoverable,
+  private <T> Node<?, ?> convertToNode(Method method, T instance, Identified identified,
       Identifier<Object> identifier, Identifier<?>[] aliases) {
     final Node<?, ?> node;
-    if (discoverable.futile()) {
-      node = Node.builder(identifier, aliases)
-          .map(Discoverable.METHOD_IDENTIFIER)
-          .to(method)
-          .build();
+    if (identified.futile()) {
+      node = Node.builder(identifier, aliases).map(Identified.METHOD_IDENTIFIER).to(method).build();
     } else {
       Target<List<String>, ?> target;
-      if (discoverable.async()) {
+      if (identified.async()) {
         target = new FutureTarget<>(discoveryConfiguration.executorService(),
             transformingTarget.then(new MethodTarget<>(method, instance)));
       } else {
         target = transformingTarget.then(new MethodTarget<>(method, instance));
       }
-      node = Node.builder(identifier, aliases)
-          .withHandle()
-          .withParameters(parseParameters(method))
-          .endHandle()
-          .map(Discoverable.METHOD_IDENTIFIER)
-          .to(method)
-          .withTarget(target)
-          .withSuggester(transformingSuggester)
-          .build();
+      node = Node.builder(identifier, aliases).withHandle().withParameters(parseParameters(method))
+          .endHandle().map(Identified.METHOD_IDENTIFIER).to(method).withTarget(target)
+          .withSuggester(transformingSuggester).build();
     }
     return node;
   }

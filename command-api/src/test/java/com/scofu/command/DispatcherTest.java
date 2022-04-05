@@ -7,7 +7,7 @@ import com.google.inject.Scopes;
 import com.google.inject.Stage;
 import com.scofu.app.Service;
 import com.scofu.app.bootstrap.BootstrapModule;
-import com.scofu.command.model.Discoverable;
+import com.scofu.command.model.Identified;
 import com.scofu.command.model.Identifier;
 import com.scofu.command.model.Node;
 import com.scofu.command.target.Target;
@@ -32,11 +32,11 @@ public class DispatcherTest extends Service {
 
     // discovered
     bindFeatureInstance(new Feature() {
-      @Discoverable(identifier = "test", futile = true)
+      @Identified(value = "test", futile = true)
       void root() {
       }
 
-      @Discoverable(identifier = "test uppercase")
+      @Identified(value = "test uppercase")
       String uppercase(String message) {
         return message.toUpperCase(Locale.ROOT);
       }

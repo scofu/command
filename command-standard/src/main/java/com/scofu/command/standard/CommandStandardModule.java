@@ -25,6 +25,7 @@ public class CommandStandardModule extends AbstractFeatureModule {
     bindFeature(ContextTransformer.class).in(Scopes.SINGLETON);
     bindFeature(DurationTransformer.class).in(Scopes.SINGLETON);
     bindFeature(EnumTransformer.class).in(Scopes.SINGLETON);
+    bindFeature(ExpansionTransformer.class).in(Scopes.SINGLETON);
     bindFeature(IntegerTransformer.class).in(Scopes.SINGLETON);
     bindFeature(OptionalTransformer.class).in(Scopes.SINGLETON);
     bindFeature(StringTransformer.class).in(Scopes.SINGLETON);

@@ -8,14 +8,16 @@ import com.scofu.app.Service;
 import com.scofu.app.bootstrap.BootstrapModule;
 import com.scofu.command.Context;
 import com.scofu.command.Dispatcher;
+import com.scofu.command.model.Expansion;
 import com.scofu.command.model.Identified;
+import com.scofu.command.model.Identifier;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
 /**
- * Tests {@link java.util.Optional} in commands.
+ * Tests {@link Optional} in commands.
  */
-public class OptionalTest extends Service {
+public class ExpansionTest extends Service {
 
   @Inject
   private Dispatcher dispatcher;
@@ -28,15 +30,18 @@ public class OptionalTest extends Service {
   @Test
   public void test() {
     load(Stage.PRODUCTION, this);
-    final var sixtyNine = dispatcher.dispatchString(Context.simple(), "add 35 34");
-    final var three = dispatcher.dispatchString(Context.simple(), "add 3");
-    assertEquals(69, sixtyNine);
+    final var context = Context.simple();
+    context.map(Identifier.of("b")).to(34);
+    final var one = dispatcher.dispatchString(context, "subtract 35");
+    context.map(Identifier.of("b")).toNothing();
+    final var three = dispatcher.dispatchString(context, "subtract 3");
+    assertEquals(1, one);
     assertEquals(3, three);
   }
 
-  @Identified(value = "add")
-  int add(int a, Optional<Integer> b) {
-    return a + b.orElse(0);
+  @Identified("subtract")
+  int subtract(int a, @Identified("b") Expansion<Integer> b) {
+    return a - b.get().orElse(0);
   }
 
 }

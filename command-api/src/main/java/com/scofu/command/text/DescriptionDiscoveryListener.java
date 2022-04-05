@@ -1,7 +1,7 @@
 package com.scofu.command.text;
 
-import com.scofu.command.model.Discoverable;
 import com.scofu.command.model.DiscoveryListener;
+import com.scofu.command.model.Identified;
 import com.scofu.command.model.Node;
 
 /**
@@ -11,7 +11,7 @@ public class DescriptionDiscoveryListener implements DiscoveryListener {
 
   @Override
   public <T, R> void onDiscovery(Node<T, R> node, boolean root) {
-    node.expand(Discoverable.METHOD_IDENTIFIER)
+    node.expand(Identified.METHOD_IDENTIFIER)
         .filter(method -> method.isAnnotationPresent(Description.class))
         .map(method -> method.getAnnotation(Description.class))
         .map(Description::value)
