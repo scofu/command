@@ -1,10 +1,11 @@
 package com.scofu.command.bukkit;
 
 import com.scofu.command.Dispatcher;
-import com.scofu.command.bukkit.context.KeyProviderMap;
 import com.scofu.command.model.Expansion;
 import com.scofu.command.model.Identifier;
 import com.scofu.command.model.Node;
+import com.scofu.command.text.AudienceContext;
+import com.scofu.command.text.HelpMessageGenerator;
 import com.scofu.command.validation.Permission;
 import java.util.List;
 import java.util.Locale;
@@ -23,13 +24,13 @@ import org.bukkit.entity.Player;
 public class ForwardingCommand extends BukkitCommand {
 
   private final Dispatcher dispatcher;
-  private final KeyProviderMap keyProviderMap;
+  private final HelpMessageGenerator helpMessageGenerator;
 
   protected ForwardingCommand(Node<?, ?> node, Dispatcher dispatcher,
-      KeyProviderMap keyProviderMap) {
+      HelpMessageGenerator helpMessageGenerator) {
     super(node.identifiers().get(0).toPath());
     this.dispatcher = dispatcher;
-    this.keyProviderMap = keyProviderMap;
+    this.helpMessageGenerator = helpMessageGenerator;
     setAliases(node.identifiers().stream().skip(1).map(Identifier::toPath).toList());
     System.out.println("node.identifiers() = " + node.identifiers());
     System.out.println(
@@ -45,8 +46,11 @@ public class ForwardingCommand extends BukkitCommand {
                 ForwardingDiscoveryListener.FALLBACK_PREFIX + ":", 2)[1] : alias), Stream.of(args))
         .collect(Collectors.joining(" "));
     final var locale = getLocale(commandSender);
-    keyProviderMap.getOrCreateContext(commandSender, locale)
-        .ifPresent(context -> dispatcher.dispatchString(context, command));
+    final var context = new AudienceContext(commandSender, locale, helpMessageGenerator);
+    context.map(Permission.HOLDER_IDENTIFIER)
+        .to(permission -> commandSender.isOp() || commandSender.hasPermission(permission));
+    context.map(Identifier.of("source")).to(commandSender);
+    dispatcher.dispatchString(context, command);
     return false;
   }
 
@@ -58,9 +62,11 @@ public class ForwardingCommand extends BukkitCommand {
                 ForwardingDiscoveryListener.FALLBACK_PREFIX + ":", 2)[1] : alias), Stream.of(args))
         .flatMap(Function.identity()).collect(Collectors.joining(" "));
     final var locale = getLocale(commandSender);
-    return keyProviderMap.getOrCreateContext(commandSender, locale)
-        .map(context -> dispatcher.suggestString(context, command)).orElse(Stream.empty())
-        .filter(s -> filtered(s, args)).toList();
+    final var context = new AudienceContext(commandSender, locale, helpMessageGenerator);
+    context.map(Permission.HOLDER_IDENTIFIER)
+        .to(permission -> commandSender.isOp() || commandSender.hasPermission(permission));
+    context.map(Identifier.of("source")).to(commandSender);
+    return dispatcher.suggestString(context, command).filter(s -> filtered(s, args)).toList();
   }
 
   private boolean filtered(String s, String[] args) {

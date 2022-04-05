@@ -62,11 +62,13 @@ public class TransformingNodeDiscoverer {
    */
   public <T> List<? extends Node<?, ?>> exploreAndRegister(Class<? extends T> type,
       @Nullable T instance) {
-    return Stream.of(type.getDeclaredMethods()).peek(method -> method.setAccessible(true)).filter(
-        ((Predicate<Method>) method -> method.isAnnotationPresent(Identified.class)).or(
-            method -> method.isAnnotationPresent(MultiIdentified.class))).flatMap(
-        method -> Stream.of(method.getAnnotationsByType(Identified.class))
-            .map(discoverable -> fromMethod(method, instance, discoverable))).toList();
+    return Stream.of(type.getDeclaredMethods())
+        .peek(method -> method.setAccessible(true))
+        .filter(((Predicate<Method>) method -> method.isAnnotationPresent(Identified.class)).or(
+            method -> method.isAnnotationPresent(MultiIdentified.class)))
+        .flatMap(method -> Stream.of(method.getAnnotationsByType(Identified.class))
+            .map(discoverable -> fromMethod(method, instance, discoverable)))
+        .toList();
   }
 
   /**

@@ -21,9 +21,6 @@ public class PlayerDescriber implements Describer<Player> {
 
   @Override
   public Optional<Component> describe(Parameter<Player> parameter) {
-    if (parameter.isAnnotationPresent(Source.class)) {
-      return Optional.empty();
-    }
     return Optional.of(
         translatable("player.parameter.description", translatable(parameter.nameOrTranslation())));
   }

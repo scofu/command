@@ -8,7 +8,7 @@ import com.scofu.command.Context;
 import com.scofu.command.ParameterArgumentException;
 import com.scofu.command.Parameters;
 import com.scofu.command.Result;
-import com.scofu.command.bukkit.context.CommandSenderContext;
+import com.scofu.command.model.Identifier;
 import com.scofu.command.model.Parameter;
 import com.scofu.command.target.Arguments;
 import com.scofu.command.target.Command;
@@ -17,6 +17,7 @@ import java.lang.reflect.Type;
 import java.util.UUID;
 import java.util.stream.Stream;
 import org.bukkit.Server;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 /**
@@ -39,17 +40,6 @@ public class PlayerTransformer implements Transformer<Player> {
   @Override
   public Result<Player> transform(Command command, Parameter<Player> parameter,
       Parameters parameters, Arguments arguments) {
-    if (parameter.isAnnotationPresent(Source.class)) {
-      if (command.context() instanceof CommandSenderContext commandSenderContext) {
-        if (commandSenderContext.commandSender() instanceof Player player) {
-          return Result.value(player);
-        }
-      }
-      return Result.error(
-          new ParameterArgumentException(translatable("player.transform.sender_not_player"),
-              parameter));
-    }
-
     if (!arguments.hasNext()) {
       return Result.empty();
     }
@@ -65,20 +55,12 @@ public class PlayerTransformer implements Transformer<Player> {
     if (argument.hasError()) {
       return Stream.of("\"");
     }
-    if (command.context() instanceof CommandSenderContext commandSenderContext
-        && commandSenderContext.commandSender() instanceof Player sender) {
-      return server.getOnlinePlayers().stream().filter(sender::canSee).map(Player::getName);
-    }
-    return server.getOnlinePlayers().stream().map(Player::getName);
-  }
 
-
-  @Override
-  public boolean ignoresSuggestionsForParameter(Parameter<Player> parameter) {
-    if (parameter.isAnnotationPresent(Source.class)) {
-      return true;
-    }
-    return Transformer.super.ignoresSuggestionsForParameter(parameter);
+    return command.context().<CommandSender>expand(Identifier.of("source"))
+        .filter(commandSender -> commandSender instanceof Player).map(
+            commandSender -> server.getOnlinePlayers().stream()
+                .filter(player -> ((Player) commandSender).canSee(player)).map(Player::getName))
+        .orElseGet(() -> server.getOnlinePlayers().stream().map(Player::getName));
   }
 
   private Result<Player> parsePlayer(String string, Context context, Parameter<Player> parameter) {
@@ -101,9 +83,9 @@ public class PlayerTransformer implements Transformer<Player> {
 
   private Result<Player> makeSureExistsAndVisible(String string, Context context,
       Parameter<Player> parameter, Player player, String translation) {
-    if (player == null || (context instanceof CommandSenderContext commandSenderContext
-        && commandSenderContext.commandSender() instanceof Player sender && !sender.canSee(
-        player))) {
+    if (player == null || (
+        context.expand(Identifier.of("source")).orElse(null) instanceof Player sender
+            && !sender.canSee(player))) {
       return Result.error(
           new ParameterArgumentException(translatable(translation, text(string)), parameter));
     }

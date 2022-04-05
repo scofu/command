@@ -2,9 +2,9 @@ package com.scofu.command.bukkit;
 
 import com.google.inject.Inject;
 import com.scofu.command.Dispatcher;
-import com.scofu.command.bukkit.context.KeyProviderMap;
 import com.scofu.command.model.DiscoveryListener;
 import com.scofu.command.model.Node;
+import com.scofu.command.text.HelpMessageGenerator;
 import com.scofu.command.validation.PermissionDiscoveryListener;
 import java.util.List;
 import org.bukkit.Server;
@@ -18,13 +18,14 @@ public class ForwardingDiscoveryListener implements DiscoveryListener {
 
   private final Server server;
   private final Dispatcher dispatcher;
-  private final KeyProviderMap keyProviderMap;
+  private final HelpMessageGenerator helpMessageGenerator;
 
   @Inject
-  ForwardingDiscoveryListener(Server server, Dispatcher dispatcher, KeyProviderMap keyProviderMap) {
+  ForwardingDiscoveryListener(Server server, Dispatcher dispatcher,
+      HelpMessageGenerator helpMessageGenerator) {
     this.server = server;
     this.dispatcher = dispatcher;
-    this.keyProviderMap = keyProviderMap;
+    this.helpMessageGenerator = helpMessageGenerator;
   }
 
   @Override
@@ -39,6 +40,6 @@ public class ForwardingDiscoveryListener implements DiscoveryListener {
     }
     System.out.println("REGISTERING FORWARDING COMMAND: " + node.identifiers());
     server.getCommandMap()
-        .register(FALLBACK_PREFIX, new ForwardingCommand(node, dispatcher, keyProviderMap));
+        .register(FALLBACK_PREFIX, new ForwardingCommand(node, dispatcher, helpMessageGenerator));
   }
 }
