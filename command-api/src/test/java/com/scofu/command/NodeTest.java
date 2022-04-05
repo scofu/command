@@ -26,8 +26,10 @@ public class NodeTest {
 
   @Test
   public void testChild() throws Throwable {
-    final var test = Node.builder(Identifier.of("test")).withChild(Identifier.of("child"))
-        .endChild().build();
+    final var test = Node.builder(Identifier.of("test"))
+        .withChild(Identifier.of("child"))
+        .endChild()
+        .build();
     final var childResult = test.validateDirectChildByIdentifier(Context.simple(), Set.of(), true,
         Identifier.of("child"));
     assertFalse(childResult.hasError());
@@ -36,8 +38,12 @@ public class NodeTest {
 
   @Test
   public void testValidateChildNoPermission() throws Throwable {
-    final var test = Node.builder(Identifier.of("test")).withChild(Identifier.of("child"))
-        .map(Permission.PERMISSION_IDENTIFIER).to("test.permission").endChild().build();
+    final var test = Node.builder(Identifier.of("test"))
+        .withChild(Identifier.of("child"))
+        .map(Permission.PERMISSION_IDENTIFIER)
+        .to("test.permission")
+        .endChild()
+        .build();
     final var context = Context.simple().map(Permission.HOLDER_IDENTIFIER).to(permission -> false);
     final var childResult = test.validateDirectChildByIdentifier(context,
         Set.of(new PermissionValidator()), true, Identifier.of("child"));
@@ -47,9 +53,14 @@ public class NodeTest {
 
   @Test
   public void testValidateChildWithPermission() throws Throwable {
-    final var node = Node.builder(Identifier.of("test")).withChild(Identifier.of("child"))
-        .map(Permission.PERMISSION_IDENTIFIER).to("test.permission").endChild().build();
-    final var context = Context.simple().map(Permission.HOLDER_IDENTIFIER)
+    final var node = Node.builder(Identifier.of("test"))
+        .withChild(Identifier.of("child"))
+        .map(Permission.PERMISSION_IDENTIFIER)
+        .to("test.permission")
+        .endChild()
+        .build();
+    final var context = Context.simple()
+        .map(Permission.HOLDER_IDENTIFIER)
         .to(permission -> permission.equals("test.permission"));
     final var childResult = node.validateDirectChildByIdentifier(context,
         Set.of(new PermissionValidator()), true, Identifier.of("child"));

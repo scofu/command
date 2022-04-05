@@ -30,8 +30,7 @@ final class OptionalDescriber implements Describer<Optional> {
   public Optional<Component> describe(Parameter<Optional> parameter) {
     final var argumentType = parameter.type() instanceof ParameterizedType parameterizedType
         && parameterizedType.getActualTypeArguments().length > 0
-        ? parameterizedType.getActualTypeArguments()[0]
-        : null;
+        ? parameterizedType.getActualTypeArguments()[0] : null;
     return Optional.ofNullable(argumentType)
         .flatMap(describerMap::get)
         .flatMap(describer -> describer.describe((Parameter) parameter));

@@ -44,8 +44,9 @@ public class TransformingNodeDiscoverer {
     this.dispatcher = dispatcher;
     this.transformingTarget = transformingTarget;
     this.transformingSuggester = transformingSuggester;
-    this.discoveryListeners = discoveryListeners.stream().sorted().collect(
-        Collectors.toCollection(LinkedHashSet::new));
+    this.discoveryListeners = discoveryListeners.stream()
+        .sorted()
+        .collect(Collectors.toCollection(LinkedHashSet::new));
     this.waitingForParents = new ConcurrentHashMap<>();
     this.cache = Maps.newConcurrentMap();
 
@@ -90,7 +91,8 @@ public class TransformingNodeDiscoverer {
     final var path = identified.value().split(" ");
     final var identifier = Identifier.of(path[path.length - 1]);
     final var fullyQualifiedIdentifier = Identifier.of(String.join(" ", path));
-    final var aliases = Stream.of(identified.aliases()).map(Identifier::of)
+    final var aliases = Stream.of(identified.aliases())
+        .map(Identifier::of)
         .toArray(Identifier<?>[]::new);
     final var node = convertToNode(method, instance, identified, identifier, aliases);
 
@@ -146,9 +148,15 @@ public class TransformingNodeDiscoverer {
       } else {
         target = transformingTarget.then(new MethodTarget<>(method, instance));
       }
-      node = Node.builder(identifier, aliases).withHandle().withParameters(parseParameters(method))
-          .endHandle().map(Identified.METHOD_IDENTIFIER).to(method).withTarget(target)
-          .withSuggester(transformingSuggester).build();
+      node = Node.builder(identifier, aliases)
+          .withHandle()
+          .withParameters(parseParameters(method))
+          .endHandle()
+          .map(Identified.METHOD_IDENTIFIER)
+          .to(method)
+          .withTarget(target)
+          .withSuggester(transformingSuggester)
+          .build();
     }
     return node;
   }

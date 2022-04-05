@@ -46,8 +46,8 @@ final class BooleanTransformer implements Transformer<Boolean> {
 
   @Override
   public boolean test(Type type) {
-    return type instanceof Class rawType
-        && (Boolean.class.isAssignableFrom(rawType) || boolean.class.isAssignableFrom(rawType));
+    return type instanceof Class rawType && (Boolean.class.isAssignableFrom(rawType)
+        || boolean.class.isAssignableFrom(rawType));
   }
 
   @Override

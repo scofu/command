@@ -55,7 +55,8 @@ public class RealParameterBuilder<T, R> implements ParameterBuilder<T, R> {
     if (annotations == null) {
       annotations = List.of(annotation);
     } else {
-      annotations = Stream.of(annotations, List.of(annotation)).flatMap(Collection::stream)
+      annotations = Stream.of(annotations, List.of(annotation))
+          .flatMap(Collection::stream)
           .collect(Collectors.toList());
     }
     return this;

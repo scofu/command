@@ -38,8 +38,8 @@ public class HelpMessageGenerator {
   private final UsageGenerator usageGenerator;
 
   @Inject
-  HelpMessageGenerator(HelpMessageConfiguration helpMessageConfiguration,
-      Set<Validator> validators, DescriberMap describerMap, UsageGenerator usageGenerator) {
+  HelpMessageGenerator(HelpMessageConfiguration helpMessageConfiguration, Set<Validator> validators,
+      DescriberMap describerMap, UsageGenerator usageGenerator) {
     this.helpMessageConfiguration = helpMessageConfiguration;
     this.validators = validators;
     this.describerMap = describerMap;

@@ -29,14 +29,12 @@ import javax.annotation.Nullable;
  * @param <T> the type of the input
  * @param <R> the type of the output
  */
-public record Node<T, R>(List<Identifier<?>> identifiers,
-                         @Nullable Handle handle,
-                         @Nullable Target<T, R> target,
-                         @Nullable Suggester<T> suggester,
+public record Node<T, R>(List<Identifier<?>> identifiers, @Nullable Handle handle,
+                         @Nullable Target<T, R> target, @Nullable Suggester<T> suggester,
                          Map<Identifier<?>, Node<?, ?>> nodes,
                          Map<Identifier<?>, Node<?, ?>> aliasedNodes,
-                         Map<Identifier<?>, Expansion<?>> expansions)
-    implements NodeTree, Expandable<Node<T, R>> {
+                         Map<Identifier<?>, Expansion<?>> expansions) implements NodeTree,
+    Expandable<Node<T, R>> {
 
   /**
    * Returns a new builder.

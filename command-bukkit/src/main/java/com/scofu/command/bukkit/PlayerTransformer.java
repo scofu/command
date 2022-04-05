@@ -56,10 +56,13 @@ public class PlayerTransformer implements Transformer<Player> {
       return Stream.of("\"");
     }
 
-    return command.context().<CommandSender>expand(Identifier.of("source"))
-        .filter(commandSender -> commandSender instanceof Player).map(
-            commandSender -> server.getOnlinePlayers().stream()
-                .filter(player -> ((Player) commandSender).canSee(player)).map(Player::getName))
+    return command.context()
+        .<CommandSender>expand(Identifier.of("source"))
+        .filter(commandSender -> commandSender instanceof Player)
+        .map(commandSender -> server.getOnlinePlayers()
+            .stream()
+            .filter(player -> ((Player) commandSender).canSee(player))
+            .map(Player::getName))
         .orElseGet(() -> server.getOnlinePlayers().stream().map(Player::getName));
   }
 

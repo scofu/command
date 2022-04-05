@@ -38,8 +38,7 @@ final class OptionalTransformer implements Transformer<Optional> {
       Parameters parameters, Arguments arguments) {
     final var argumentType = parameter.type() instanceof ParameterizedType parameterizedType
         && parameterizedType.getActualTypeArguments().length > 0
-        ? parameterizedType.getActualTypeArguments()[0]
-        : null;
+        ? parameterizedType.getActualTypeArguments()[0] : null;
 
     if (argumentType == null) {
       return Result.error(
@@ -61,8 +60,7 @@ final class OptionalTransformer implements Transformer<Optional> {
       Parameters parameters, Result<String> argument) {
     final var argumentType = parameter.type() instanceof ParameterizedType parameterizedType
         && parameterizedType.getActualTypeArguments().length > 0
-        ? parameterizedType.getActualTypeArguments()[0]
-        : null;
+        ? parameterizedType.getActualTypeArguments()[0] : null;
 
     if (argumentType == null) {
       throw new ParameterException(translatable("optional.transform.missing_type_argument"),

@@ -23,10 +23,13 @@ public class CommandBukkitModule extends AbstractFeatureModule {
     bindFeatureInstance(new BundledTranslationProvider(Locale.US, "command-bukkit_en_US",
         CommandBukkitModule.class.getClassLoader()));
 
-    Multibinder.newSetBinder(binder(), DiscoveryListener.class).addBinding()
-        .to(ForwardingDiscoveryListener.class).in(Scopes.SINGLETON);
+    Multibinder.newSetBinder(binder(), DiscoveryListener.class)
+        .addBinding()
+        .to(ForwardingDiscoveryListener.class)
+        .in(Scopes.SINGLETON);
 
-    OptionalBinder.newOptionalBinder(binder(), HelpMessageConfiguration.class).setBinding()
+    OptionalBinder.newOptionalBinder(binder(), HelpMessageConfiguration.class)
+        .setBinding()
         .toProvider(() -> HelpMessageConfiguration.builder().withCommandPrefix("/").build())
         .in(Scopes.SINGLETON);
   }

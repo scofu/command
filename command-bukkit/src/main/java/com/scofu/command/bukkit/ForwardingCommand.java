@@ -33,9 +33,14 @@ public class ForwardingCommand extends BukkitCommand {
     this.helpMessageGenerator = helpMessageGenerator;
     setAliases(node.identifiers().stream().skip(1).map(Identifier::toPath).toList());
     System.out.println("node.identifiers() = " + node.identifiers());
-    System.out.println(
-        "node.expansions() = " + node.expansions().values().stream().map(Expansion::get)
-            .filter(Optional::isPresent).map(Optional::get).map(Object::toString).toList());
+    System.out.println("node.expansions() = " + node.expansions()
+        .values()
+        .stream()
+        .map(Expansion::get)
+        .filter(Optional::isPresent)
+        .map(Optional::get)
+        .map(Object::toString)
+        .toList());
     node.expand(Permission.PERMISSION_IDENTIFIER).ifPresent(this::setPermission);
   }
 
@@ -60,7 +65,8 @@ public class ForwardingCommand extends BukkitCommand {
     var command = Stream.of(Stream.of(
             alias.startsWith(ForwardingDiscoveryListener.FALLBACK_PREFIX + ":") ? alias.split(
                 ForwardingDiscoveryListener.FALLBACK_PREFIX + ":", 2)[1] : alias), Stream.of(args))
-        .flatMap(Function.identity()).collect(Collectors.joining(" "));
+        .flatMap(Function.identity())
+        .collect(Collectors.joining(" "));
     final var locale = getLocale(commandSender);
     final var context = new AudienceContext(commandSender, locale, helpMessageGenerator);
     context.map(Permission.HOLDER_IDENTIFIER)

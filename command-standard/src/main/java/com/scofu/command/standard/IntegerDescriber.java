@@ -13,8 +13,8 @@ final class IntegerDescriber implements Describer<Integer> {
 
   @Override
   public boolean test(Type type) {
-    return type instanceof Class rawType
-        && (Integer.class.isAssignableFrom(rawType) || int.class.isAssignableFrom(rawType));
+    return type instanceof Class rawType && (Integer.class.isAssignableFrom(rawType)
+        || int.class.isAssignableFrom(rawType));
   }
 
   @Override

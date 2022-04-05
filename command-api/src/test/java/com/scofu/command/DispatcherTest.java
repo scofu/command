@@ -67,10 +67,10 @@ public class DispatcherTest extends Service {
   public void test() {
     load(Stage.PRODUCTION, this);
 
-    final var toUpper = (Function<String, String>) (message ->
-        dispatcher.dispatchString(Context.simple(), "test uppercase " + message));
-    final var toLower = (Function<String, String>) (message ->
-        dispatcher.dispatchString(Context.simple(), "test lowercase " + message));
+    final var toUpper = (Function<String, String>) (message -> dispatcher.dispatchString(
+        Context.simple(), "test uppercase " + message));
+    final var toLower = (Function<String, String>) (message -> dispatcher.dispatchString(
+        Context.simple(), "test lowercase " + message));
     final var toUpperThenToLower = toUpper.andThen(toLower);
 
     assertEquals("HELLO", toUpper.apply("hello"));

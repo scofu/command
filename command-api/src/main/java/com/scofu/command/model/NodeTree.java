@@ -106,8 +106,7 @@ public interface NodeTree {
       parentNode = node.hasError() ? null : node.get();
       parentIdentifier = identifier;
     }
-    return node == null
-        ? Result.error(new DispatchException(translatable("node.resolve.no_match")))
+    return node == null ? Result.error(new DispatchException(translatable("node.resolve.no_match")))
         : node;
   }
 

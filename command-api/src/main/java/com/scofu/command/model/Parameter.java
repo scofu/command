@@ -9,8 +9,9 @@ import java.lang.reflect.Type;
  *
  * @param <T> the type of the parameter
  */
-public record Parameter<T>(String nameOrTranslation, Type type, AnnotatedElement annotatedElement)
-    implements ForwardingAnnotatedElement {
+public record Parameter<T>(String nameOrTranslation, Type type,
+                           AnnotatedElement annotatedElement) implements
+    ForwardingAnnotatedElement {
 
   /**
    * Sets the type.

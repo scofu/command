@@ -18,13 +18,13 @@ import org.junit.jupiter.api.Test;
  */
 public class EnumTest extends Service {
 
+  @Inject
+  private Dispatcher dispatcher;
+
   @Override
   protected void configure() {
     install(new BootstrapModule(getClass().getClassLoader()));
   }
-
-  @Inject
-  private Dispatcher dispatcher;
 
   @Test
   public void test() {

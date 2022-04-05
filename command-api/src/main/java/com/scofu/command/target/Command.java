@@ -11,6 +11,5 @@ import com.scofu.command.model.Node;
  * @param identifiers the identifiers
  * @param node        the node
  */
-public record Command(Context context,
-                      Iterable<? extends Identifier<?>> identifiers,
+public record Command(Context context, Iterable<? extends Identifier<?>> identifiers,
                       Node<?, ?> node) {}

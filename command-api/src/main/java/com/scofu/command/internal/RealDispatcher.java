@@ -53,10 +53,11 @@ public class RealDispatcher implements Dispatcher {
     final var result = resolveNodeByIdentifiers(context, validators,
         NodeIdentifierIterator.dynamic(identifiersOrArguments, identifiers::add));
     final var lastTestedIdentifier = identifiersOrArguments.peek().map(Identifier::of).orElse(null);
-    final var argument = identifiersOrArguments.hasNext() ? Stream.iterate(
-            identifiersOrArguments.next(), Objects::nonNull,
-            unused -> identifiersOrArguments.hasNext() ? identifiersOrArguments.next() : null)
-        .collect(collector) : null;
+    final var argument =
+        identifiersOrArguments.hasNext() ? Stream.iterate(identifiersOrArguments.next(),
+                Objects::nonNull,
+                unused -> identifiersOrArguments.hasNext() ? identifiersOrArguments.next() : null)
+            .collect(collector) : null;
     if (result.hasError()) {
       return context.onDispatchResolveError(identifiers, argument, result.error());
     }
@@ -95,14 +96,14 @@ public class RealDispatcher implements Dispatcher {
           .map(Entry::getKey)
           .map(Identifier::toPath);
     }
-    final var argument = identifiersOrArguments.hasNext() ? Stream.iterate(
-            identifiersOrArguments.next(), Objects::nonNull,
-            unused -> identifiersOrArguments.hasNext() ? identifiersOrArguments.next() : null)
-        .collect(collector) : null;
+    final var argument =
+        identifiersOrArguments.hasNext() ? Stream.iterate(identifiersOrArguments.next(),
+                Objects::nonNull,
+                unused -> identifiersOrArguments.hasNext() ? identifiersOrArguments.next() : null)
+            .collect(collector) : null;
     final var node = (Node<T, R>) result.get();
     final var suggester = node.suggester();
-    final var children = node.nodes().isEmpty()
-        ? Stream.<String>empty()
+    final var children = node.nodes().isEmpty() ? Stream.<String>empty()
         : Stream.concat(node.nodes(context, validators).stream(),
                 node.aliasedNodes(context, validators).stream())
             .map(Entry::getKey)

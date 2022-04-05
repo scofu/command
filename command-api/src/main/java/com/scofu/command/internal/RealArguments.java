@@ -91,8 +91,7 @@ public class RealArguments implements Arguments {
 
   @Override
   public Stream<String> remaining() {
-    return hasNext()
-        ? Stream.iterate(next(), Objects::nonNull, unused -> hasNext() ? next() : null)
+    return hasNext() ? Stream.iterate(next(), Objects::nonNull, unused -> hasNext() ? next() : null)
         : Stream.empty();
   }
 

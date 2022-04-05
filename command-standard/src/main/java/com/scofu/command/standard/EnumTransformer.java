@@ -56,8 +56,7 @@ final class EnumTransformer implements Transformer<Enum> {
                 .map(EnumTransformer.this::toComponent)
                 .collect(Component.toComponent(text(", ")))
                 .append(space());
-            var last = toComponent(enums.length > (MAX_IN_ERROR - 1)
-                ? enums[MAX_IN_ERROR - 1]
+            var last = toComponent(enums.length > (MAX_IN_ERROR - 1) ? enums[MAX_IN_ERROR - 1]
                 : enums[enums.length - 1]);
             var values = joined.append(translatable("enum.transform.invalid.or"))
                 .append(space())
@@ -102,8 +101,7 @@ final class EnumTransformer implements Transformer<Enum> {
     return Stream.of(enums.getUnchecked(enumClass))
         .map(constant -> constant instanceof TranslatedEnum translatedEnum
             ? translationRegistry.translate(translatedEnum.translation(),
-            command.context().locale()).format(null)
-            : constant.name())
+            command.context().locale()).format(null) : constant.name())
         .map(String::toLowerCase);
   }
 

@@ -46,8 +46,7 @@ public class PeekableIterator<T> implements Iterator<T> {
    * Peeks at the next value.
    */
   public Optional<T> peek() {
-    return peek != null
-        ? Optional.of(peek)
+    return peek != null ? Optional.of(peek)
         : hasNext() ? Optional.of(peek = iterator.next()) : Optional.empty();
   }
 }
