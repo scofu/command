@@ -36,7 +36,7 @@ public class DispatcherTest extends Service {
       void root() {
       }
 
-      @Identified(value = "test uppercase")
+      @Identified("test uppercase")
       String uppercase(String message) {
         return message.toUpperCase(Locale.ROOT);
       }

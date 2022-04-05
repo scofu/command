@@ -34,7 +34,7 @@ public class OptionalTest extends Service {
     assertEquals(3, three);
   }
 
-  @Identified(value = "add")
+  @Identified("add")
   int add(int a, Optional<Integer> b) {
     return a + b.orElse(0);
   }

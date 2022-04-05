@@ -37,12 +37,12 @@ public class EnumTest extends Service {
     assertEquals(List.of("cat", "dog", "dog"), suggestions.toList());
   }
 
-  @Identified(value = "favorite")
+  @Identified("favorite")
   String describeAnimal(Animal animal) {
     return "My favorite animal is %s.".formatted(animal.name().toLowerCase(Locale.ROOT));
   }
 
-  @Identified(value = "favorite dog")
+  @Identified("favorite dog")
   String overridden() {
     return "overridden";
   }

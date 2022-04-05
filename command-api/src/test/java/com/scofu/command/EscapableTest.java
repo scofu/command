@@ -32,7 +32,7 @@ public class EscapableTest extends Service {
     assertEquals("hello, world!", greeting);
   }
 
-  @Identified(value = "greet")
+  @Identified("greet")
   String format(@Escapable String greeting) {
     return greeting.formatted("world");
   }
