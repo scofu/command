@@ -56,6 +56,13 @@ public interface Expansion<T> {
   Optional<T> get();
 
   /**
+   * See {@link Optional#orElseThrow()}.
+   */
+  default T orElseThrow() {
+    return get().orElseThrow();
+  }
+
+  /**
    * Empty expansion.
    */
   class Empty implements Expansion {
