@@ -20,10 +20,7 @@ import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-/**
- * Transforms players.
- */
-public class PlayerTransformer implements Transformer<Player> {
+final class PlayerTransformer implements Transformer<Player> {
 
   private final Server server;
 

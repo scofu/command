@@ -9,10 +9,7 @@ import java.util.Optional;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 
-/**
- * Describes player parameters.
- */
-public class PlayerDescriber implements Describer<Player> {
+final class PlayerDescriber implements Describer<Player> {
 
   @Override
   public boolean test(Type type) {

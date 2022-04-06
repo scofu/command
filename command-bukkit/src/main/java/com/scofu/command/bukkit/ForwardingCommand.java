@@ -18,15 +18,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.defaults.BukkitCommand;
 import org.bukkit.entity.Player;
 
-/**
- * Forwards an internal command to bukkit.
- */
-public class ForwardingCommand extends BukkitCommand {
+final class ForwardingCommand extends BukkitCommand {
 
   private final Dispatcher dispatcher;
   private final HelpMessageGenerator helpMessageGenerator;
 
-  protected ForwardingCommand(Node<?, ?> node, Dispatcher dispatcher,
+  ForwardingCommand(Node<?, ?> node, Dispatcher dispatcher,
       HelpMessageGenerator helpMessageGenerator) {
     super(node.identifiers().get(0).toPath());
     this.dispatcher = dispatcher;

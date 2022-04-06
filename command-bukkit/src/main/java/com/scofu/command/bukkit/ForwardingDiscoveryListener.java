@@ -9,10 +9,7 @@ import com.scofu.command.validation.PermissionDiscoveryListener;
 import java.util.List;
 import org.bukkit.Server;
 
-/**
- * Registers discovered nodes as forwarding commands to bukkit's command map.
- */
-public class ForwardingDiscoveryListener implements DiscoveryListener {
+final class ForwardingDiscoveryListener implements DiscoveryListener {
 
   public static final String FALLBACK_PREFIX = "scofu";
 
