@@ -53,7 +53,9 @@ public class RealDispatcher implements Dispatcher {
     final var identifiers = new ArrayList<Identifier<?>>();
     final var result = resolveNodeByIdentifiers(context, validators,
         NodeIdentifierIterator.dynamic(identifiersOrArguments, identifiers::add));
-    final var lastTestedIdentifier = identifiersOrArguments.peek().map(Identifier::of).orElse(null);
+    final var lastTestedIdentifier = identifiersOrArguments.peek()
+        .map(Identifier::identifier)
+        .orElse(null);
     final var argument =
         identifiersOrArguments.hasNext() ? Stream.iterate(identifiersOrArguments.next(),
                 Objects::nonNull,

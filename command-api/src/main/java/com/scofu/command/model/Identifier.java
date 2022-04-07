@@ -18,17 +18,6 @@ public interface Identifier<T> {
    * @param <T>   the type of the identifier
    * @param <R>   the type of the value
    */
-  static <T, R> Identifier<T> of(R value) {
-    return new Basic<>(value);
-  }
-
-  /**
-   * Creates and returns a new basic identifier.
-   *
-   * @param value the value
-   * @param <T>   the type of the identifier
-   * @param <R>   the type of the value
-   */
   static <T, R> Identifier<T> identifier(R value) {
     return new Basic<>(value);
   }
@@ -40,7 +29,7 @@ public interface Identifier<T> {
    * @param extra the extra idenfitiers
    */
   static Iterable<? extends Identifier<?>> chain(Object first, Object... extra) {
-    return Stream.concat(Stream.of(first), Stream.of(extra)).map(Identifier::of).toList();
+    return Stream.concat(Stream.of(first), Stream.of(extra)).map(Identifier::identifier).toList();
   }
 
   /**
