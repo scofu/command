@@ -1,5 +1,7 @@
 package com.scofu.command.target;
 
+import static java.util.concurrent.CompletableFuture.supplyAsync;
+
 import com.scofu.command.model.Node;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
@@ -24,7 +26,7 @@ public class FutureTarget<T, R> implements Target<T, CompletableFuture<R>> {
   @SuppressWarnings("unchecked")
   @Override
   public CompletableFuture<R> invoke(Command command, T argument) throws Throwable {
-    return CompletableFuture.supplyAsync(() -> {
+    return supplyAsync(() -> {
       try {
         return target.invoke(command, argument);
       } catch (Throwable e) {
