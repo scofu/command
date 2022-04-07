@@ -19,42 +19,42 @@ public class NodeTest {
 
   @Test
   public void testIdentifiers() {
-    final var test = Node.builder(Identifier.of("test")).build();
+    final var test = Node.builder(Identifier.identifier("test")).build();
     assertEquals(test.identifiers().size(), 1);
-    assertEquals(test.identifiers().iterator().next(), Identifier.of("test"));
+    assertEquals(test.identifiers().iterator().next(), Identifier.identifier("test"));
   }
 
   @Test
   public void testChild() throws Throwable {
-    final var test = Node.builder(Identifier.of("test"))
-        .withChild(Identifier.of("child"))
+    final var test = Node.builder(Identifier.identifier("test"))
+        .withChild(Identifier.identifier("child"))
         .endChild()
         .build();
     final var childResult = test.validateDirectChildByIdentifier(Context.simple(), Set.of(), true,
-        Identifier.of("child"));
+        Identifier.identifier("child"));
     assertFalse(childResult.hasError());
-    assertSame(childResult.get(), test.nodes().get(Identifier.of("child")));
+    assertSame(childResult.get(), test.nodes().get(Identifier.identifier("child")));
   }
 
   @Test
   public void testValidateChildNoPermission() throws Throwable {
-    final var test = Node.builder(Identifier.of("test"))
-        .withChild(Identifier.of("child"))
+    final var test = Node.builder(Identifier.identifier("test"))
+        .withChild(Identifier.identifier("child"))
         .map(Permission.PERMISSION_IDENTIFIER)
         .to("test.permission")
         .endChild()
         .build();
     final var context = Context.simple().map(Permission.HOLDER_IDENTIFIER).to(permission -> false);
     final var childResult = test.validateDirectChildByIdentifier(context,
-        Set.of(new PermissionValidator()), true, Identifier.of("child"));
+        Set.of(new PermissionValidator()), true, Identifier.identifier("child"));
     assertTrue(childResult.hasError());
     assertTrue(childResult.error() instanceof DispatchHandleUnvalidatedException);
   }
 
   @Test
   public void testValidateChildWithPermission() throws Throwable {
-    final var node = Node.builder(Identifier.of("test"))
-        .withChild(Identifier.of("child"))
+    final var node = Node.builder(Identifier.identifier("test"))
+        .withChild(Identifier.identifier("child"))
         .map(Permission.PERMISSION_IDENTIFIER)
         .to("test.permission")
         .endChild()
@@ -63,9 +63,9 @@ public class NodeTest {
         .map(Permission.HOLDER_IDENTIFIER)
         .to(permission -> permission.equals("test.permission"));
     final var childResult = node.validateDirectChildByIdentifier(context,
-        Set.of(new PermissionValidator()), true, Identifier.of("child"));
+        Set.of(new PermissionValidator()), true, Identifier.identifier("child"));
     assertFalse(childResult.hasError());
-    assertSame(childResult.get(), node.nodes().get(Identifier.of("child")));
+    assertSame(childResult.get(), node.nodes().get(Identifier.identifier("child")));
   }
 
 }

@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Description {
 
-  Identifier<String> DESCRIPTION_IDENTIFIER = Identifier.of("description");
+  Identifier<String> DESCRIPTION_IDENTIFIER = Identifier.identifier("description");
 
   /**
    * Returns the translation key or raw description.

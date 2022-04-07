@@ -43,7 +43,7 @@ public interface NodeIdentifierIterator {
           return false;
         }
         if (identifiersOrArguments.hasNext()) {
-          final var next = Identifier.of(identifiersOrArguments.peek().orElseThrow());
+          final var next = Identifier.identifier(identifiersOrArguments.peek().orElseThrow());
           return parent.nodes().getOrDefault(next, parent.aliasedNodes().get(next)) != null;
         }
         return false;
@@ -51,7 +51,7 @@ public interface NodeIdentifierIterator {
 
       @Override
       public Identifier<?> next(NodeTree parent, Identifier<?> parentIdentifier) {
-        final var identifier = Identifier.of(identifiersOrArguments.next());
+        final var identifier = Identifier.identifier(identifiersOrArguments.next());
         consumer.accept(identifier);
         return identifier;
       }

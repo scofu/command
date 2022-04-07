@@ -31,9 +31,9 @@ public class ExpansionTest extends Service {
   public void test() {
     load(Stage.PRODUCTION, this);
     final var context = Context.simple();
-    context.map(Identifier.of("b")).to(34);
+    context.map(Identifier.identifier("b")).to(34);
     final var one = dispatcher.dispatchString(context, "subtract 35");
-    context.map(Identifier.of("b")).toNothing();
+    context.map(Identifier.identifier("b")).toNothing();
     final var three = dispatcher.dispatchString(context, "subtract 3");
     assertEquals(1, one);
     assertEquals(3, three);

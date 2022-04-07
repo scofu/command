@@ -49,7 +49,7 @@ public class DispatcherTest extends Service {
       public void enable() {
         final var target = (Target<List<String>, String>) (command, argument) -> argument.get(0)
             .toLowerCase(Locale.ROOT);
-        final var node = Node.builder(Identifier.of("lowercase"))
+        final var node = Node.builder(Identifier.identifier("lowercase"))
             .withHandle()
             .withParameter()
             .withName("message")
@@ -58,7 +58,7 @@ public class DispatcherTest extends Service {
             .endHandle()
             .withTarget(target)
             .build();
-        dispatcherProvider.get().nodes().get(Identifier.of("test")).register(node);
+        dispatcherProvider.get().nodes().get(Identifier.identifier("test")).register(node);
       }
     });
   }

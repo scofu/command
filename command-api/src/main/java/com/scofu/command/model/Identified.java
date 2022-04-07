@@ -16,7 +16,7 @@ import java.lang.reflect.Method;
 @Repeatable(MultiIdentified.class)
 public @interface Identified {
 
-  Identifier<Method> METHOD_IDENTIFIER = Identifier.of("discovered_method");
+  Identifier<Method> METHOD_IDENTIFIER = Identifier.identifier("discovered_method");
 
   /**
    * Returns the identifier.

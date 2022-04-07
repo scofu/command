@@ -138,7 +138,7 @@ public class RealDispatcher implements Dispatcher {
           return false;
         }
         if (identifiersOrArguments.hasNext()) {
-          final var next = Identifier.of(identifiersOrArguments.peek().orElseThrow());
+          final var next = Identifier.identifier(identifiersOrArguments.peek().orElseThrow());
           return parent.nodes().getOrDefault(next, parent.aliasedNodes().get(next)) != null;
         }
         return false;
@@ -146,7 +146,7 @@ public class RealDispatcher implements Dispatcher {
 
       @Override
       public Identifier<?> next(NodeTree parent, Identifier<?> parentIdentifier) {
-        return Identifier.of(identifiersOrArguments.next());
+        return Identifier.identifier(identifiersOrArguments.next());
       }
     };
   }

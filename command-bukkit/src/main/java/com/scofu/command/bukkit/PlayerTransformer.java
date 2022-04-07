@@ -54,7 +54,7 @@ final class PlayerTransformer implements Transformer<Player> {
     }
 
     return command.context()
-        .<CommandSender>expand(Identifier.of("source"))
+        .<CommandSender>expand(Identifier.identifier("source"))
         .filter(commandSender -> commandSender instanceof Player)
         .map(commandSender -> server.getOnlinePlayers()
             .stream()
@@ -84,7 +84,7 @@ final class PlayerTransformer implements Transformer<Player> {
   private Result<Player> makeSureExistsAndVisible(String string, Context context,
       Parameter<Player> parameter, Player player, String translation) {
     if (player == null || (
-        context.expand(Identifier.of("source")).orElse(null) instanceof Player sender
+        context.expand(Identifier.identifier("source")).orElse(null) instanceof Player sender
             && !sender.canSee(player))) {
       return Result.error(
           new ParameterArgumentException(translatable(translation, text(string)), parameter));

@@ -23,6 +23,17 @@ public interface Identifier<T> {
   }
 
   /**
+   * Creates and returns a new basic identifier.
+   *
+   * @param value the value
+   * @param <T>   the type of the identifier
+   * @param <R>   the type of the value
+   */
+  static <T, R> Identifier<T> identifier(R value) {
+    return new Basic<>(value);
+  }
+
+  /**
    * Creates and returns a chain of basic identifiers.
    *
    * @param first the first identifier

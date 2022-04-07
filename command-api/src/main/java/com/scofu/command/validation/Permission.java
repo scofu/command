@@ -13,8 +13,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Permission {
 
-  Identifier<PermissionHolder> HOLDER_IDENTIFIER = Identifier.of("permission_holder");
-  Identifier<String> PERMISSION_IDENTIFIER = Identifier.of("permission");
+  Identifier<PermissionHolder> HOLDER_IDENTIFIER = Identifier.identifier("permission_holder");
+  Identifier<String> PERMISSION_IDENTIFIER = Identifier.identifier("permission");
 
   /**
    * Returns the permission.

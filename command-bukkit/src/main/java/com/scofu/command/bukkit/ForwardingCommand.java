@@ -51,7 +51,7 @@ final class ForwardingCommand extends BukkitCommand {
     final var context = new AudienceContext(commandSender, locale, helpMessageGenerator);
     context.map(Permission.HOLDER_IDENTIFIER)
         .to(permission -> commandSender.isOp() || commandSender.hasPermission(permission));
-    context.map(Identifier.of("source")).to(commandSender);
+    context.map(Identifier.identifier("source")).to(commandSender);
     dispatcher.dispatchString(context, command);
     return false;
   }
@@ -68,7 +68,7 @@ final class ForwardingCommand extends BukkitCommand {
     final var context = new AudienceContext(commandSender, locale, helpMessageGenerator);
     context.map(Permission.HOLDER_IDENTIFIER)
         .to(permission -> commandSender.isOp() || commandSender.hasPermission(permission));
-    context.map(Identifier.of("source")).to(commandSender);
+    context.map(Identifier.identifier("source")).to(commandSender);
     return dispatcher.suggestString(context, command).filter(s -> filtered(s, args)).toList();
   }
 

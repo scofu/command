@@ -89,10 +89,10 @@ public class TransformingNodeDiscoverer {
    */
   public <T> Node<?, ?> fromMethod(Method method, @Nullable T instance, Identified identified) {
     final var path = identified.value().split(" ");
-    final var identifier = Identifier.of(path[path.length - 1]);
-    final var fullyQualifiedIdentifier = Identifier.of(String.join(" ", path));
+    final var identifier = Identifier.identifier(path[path.length - 1]);
+    final var fullyQualifiedIdentifier = Identifier.identifier(String.join(" ", path));
     final var aliases = Stream.of(identified.aliases())
-        .map(Identifier::of)
+        .map(Identifier::identifier)
         .toArray(Identifier<?>[]::new);
     final var node = convertToNode(method, instance, identified, identifier, aliases);
 
@@ -110,7 +110,7 @@ public class TransformingNodeDiscoverer {
       return node;
     }
 
-    final var parentIdentifier = Identifier.of(
+    final var parentIdentifier = Identifier.identifier(
         Stream.of(path).limit(path.length - 1).collect(Collectors.joining(" ")));
     final var parentNode = cache.get(parentIdentifier);
 

@@ -25,7 +25,7 @@ final class ExpansionTransformer implements Transformer<Expansion> {
   @Override
   public Result<Expansion> transform(Command command, Parameter<Expansion> parameter,
       Parameters parameters, Arguments arguments) {
-    final var identifier = Identifier.of(
+    final var identifier = Identifier.identifier(
         Optional.ofNullable(parameter.getAnnotation(Identified.class))
             .map(Identified::value)
             .orElseGet(parameter::nameOrTranslation));
