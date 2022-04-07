@@ -29,9 +29,9 @@ public class EnumTest extends Service {
   @Test
   public void test() {
     load(Stage.PRODUCTION, this);
-    final var favoriteCat = dispatcher.dispatchString(Context.simple(), "favorite cat");
-    final var favoriteDog = dispatcher.dispatchString(Context.simple(), "favorite dog");
-    final var suggestions = dispatcher.suggestString(Context.simple(), "favorite");
+    final var favoriteCat = dispatcher.dispatchString(Context.simpleContext(), "favorite cat");
+    final var favoriteDog = dispatcher.dispatchString(Context.simpleContext(), "favorite dog");
+    final var suggestions = dispatcher.suggestString(Context.simpleContext(), "favorite");
     assertEquals("My favorite animal is cat.", favoriteCat);
     assertEquals("overridden", favoriteDog);
     assertEquals(List.of("cat", "dog", "dog"), suggestions.toList());

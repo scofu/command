@@ -30,7 +30,7 @@ public class NodeTest {
         .withChild(identifier("child"))
         .endChild()
         .build();
-    final var childResult = test.validateDirectChildByIdentifier(Context.simple(), Set.of(), true,
+    final var childResult = test.validateDirectChildByIdentifier(Context.simpleContext(), Set.of(), true,
         identifier("child"));
     assertFalse(childResult.hasError());
     assertSame(childResult.get(), test.nodes().get(identifier("child")));
@@ -44,7 +44,7 @@ public class NodeTest {
         .to("test.permission")
         .endChild()
         .build();
-    final var context = Context.simple().map(Permission.HOLDER_IDENTIFIER).to(permission -> false);
+    final var context = Context.simpleContext().map(Permission.HOLDER_IDENTIFIER).to(permission -> false);
     final var childResult = test.validateDirectChildByIdentifier(context,
         Set.of(new PermissionValidator()), true, identifier("child"));
     assertTrue(childResult.hasError());
@@ -59,7 +59,7 @@ public class NodeTest {
         .to("test.permission")
         .endChild()
         .build();
-    final var context = Context.simple()
+    final var context = Context.simpleContext()
         .map(Permission.HOLDER_IDENTIFIER)
         .to(permission -> permission.equals("test.permission"));
     final var childResult = node.validateDirectChildByIdentifier(context,

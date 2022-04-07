@@ -30,7 +30,7 @@ public class ExpansionTest extends Service {
   @Test
   public void test() {
     load(Stage.PRODUCTION, this);
-    final var context = Context.simple();
+    final var context = Context.simpleContext();
     context.map(identifier("b")).to(34);
     final var one = dispatcher.dispatchString(context, "subtract 35");
     context.map(identifier("b")).toNothing();

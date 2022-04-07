@@ -28,8 +28,8 @@ public class OptionalTest extends Service {
   @Test
   public void test() {
     load(Stage.PRODUCTION, this);
-    final var sixtyNine = dispatcher.dispatchString(Context.simple(), "add 35 34");
-    final var three = dispatcher.dispatchString(Context.simple(), "add 3");
+    final var sixtyNine = dispatcher.dispatchString(Context.simpleContext(), "add 35 34");
+    final var three = dispatcher.dispatchString(Context.simpleContext(), "add 3");
     assertEquals(69, sixtyNine);
     assertEquals(3, three);
   }

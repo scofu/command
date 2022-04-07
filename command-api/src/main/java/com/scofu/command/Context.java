@@ -22,7 +22,7 @@ public interface Context extends Expandable<Context> {
   /**
    * Returns a very simple context that throws and prints errors.
    */
-  static Context simple() {
+  static Context simpleContext() {
     return Simple.SIMPLE;
   }
 
