@@ -1,5 +1,7 @@
 package com.scofu.command.model;
 
+import static com.scofu.command.model.Identifier.identifier;
+
 import com.scofu.command.target.FutureTarget;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Repeatable;
@@ -16,7 +18,7 @@ import java.lang.reflect.Method;
 @Repeatable(MultiIdentified.class)
 public @interface Identified {
 
-  Identifier<Method> METHOD_IDENTIFIER = Identifier.identifier("discovered_method");
+  Identifier<Method> METHOD_IDENTIFIER = identifier("discovered_method");
 
   /**
    * Returns the identifier.

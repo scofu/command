@@ -1,5 +1,7 @@
 package com.scofu.command.validation;
 
+import static com.scofu.command.model.Identifier.identifier;
+
 import com.scofu.command.model.Identifier;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -13,8 +15,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Permission {
 
-  Identifier<PermissionHolder> HOLDER_IDENTIFIER = Identifier.identifier("permission_holder");
-  Identifier<String> PERMISSION_IDENTIFIER = Identifier.identifier("permission");
+  Identifier<PermissionHolder> HOLDER_IDENTIFIER = identifier("permission_holder");
+  Identifier<String> PERMISSION_IDENTIFIER = identifier("permission");
 
   /**
    * Returns the permission.

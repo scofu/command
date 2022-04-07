@@ -1,5 +1,7 @@
 package com.scofu.command.text;
 
+import static com.scofu.command.model.Identifier.identifier;
+
 import com.scofu.command.model.Identifier;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -13,7 +15,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Description {
 
-  Identifier<String> DESCRIPTION_IDENTIFIER = Identifier.identifier("description");
+  Identifier<String> DESCRIPTION_IDENTIFIER = identifier("description");
 
   /**
    * Returns the translation key or raw description.

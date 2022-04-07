@@ -1,5 +1,6 @@
 package com.scofu.command;
 
+import static com.scofu.command.model.Identifier.identifier;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.google.inject.Inject;
@@ -8,7 +9,6 @@ import com.google.inject.Stage;
 import com.scofu.app.Service;
 import com.scofu.app.bootstrap.BootstrapModule;
 import com.scofu.command.model.Identified;
-import com.scofu.command.model.Identifier;
 import com.scofu.command.model.Node;
 import com.scofu.command.target.Target;
 import com.scofu.common.inject.Feature;
@@ -49,7 +49,7 @@ public class DispatcherTest extends Service {
       public void enable() {
         final var target = (Target<List<String>, String>) (command, argument) -> argument.get(0)
             .toLowerCase(Locale.ROOT);
-        final var node = Node.builder(Identifier.identifier("lowercase"))
+        final var node = Node.builder(identifier("lowercase"))
             .withHandle()
             .withParameter()
             .withName("message")
@@ -58,7 +58,7 @@ public class DispatcherTest extends Service {
             .endHandle()
             .withTarget(target)
             .build();
-        dispatcherProvider.get().nodes().get(Identifier.identifier("test")).register(node);
+        dispatcherProvider.get().nodes().get(identifier("test")).register(node);
       }
     });
   }

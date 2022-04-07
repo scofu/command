@@ -1,5 +1,6 @@
 package com.scofu.command.internal;
 
+import static com.scofu.command.model.Identifier.identifier;
 import static net.kyori.adventure.text.Component.translatable;
 
 import com.google.inject.Inject;
@@ -138,7 +139,7 @@ public class RealDispatcher implements Dispatcher {
           return false;
         }
         if (identifiersOrArguments.hasNext()) {
-          final var next = Identifier.identifier(identifiersOrArguments.peek().orElseThrow());
+          final var next = identifier(identifiersOrArguments.peek().orElseThrow());
           return parent.nodes().getOrDefault(next, parent.aliasedNodes().get(next)) != null;
         }
         return false;
@@ -146,7 +147,7 @@ public class RealDispatcher implements Dispatcher {
 
       @Override
       public Identifier<?> next(NodeTree parent, Identifier<?> parentIdentifier) {
-        return Identifier.identifier(identifiersOrArguments.next());
+        return identifier(identifiersOrArguments.next());
       }
     };
   }

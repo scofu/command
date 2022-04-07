@@ -1,5 +1,6 @@
 package com.scofu.command.bukkit;
 
+import static com.scofu.command.model.Identifier.identifier;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.Component.translatable;
 
@@ -8,7 +9,6 @@ import com.scofu.command.Context;
 import com.scofu.command.ParameterArgumentException;
 import com.scofu.command.Parameters;
 import com.scofu.command.Result;
-import com.scofu.command.model.Identifier;
 import com.scofu.command.model.Parameter;
 import com.scofu.command.target.Arguments;
 import com.scofu.command.target.Command;
@@ -54,7 +54,7 @@ final class PlayerTransformer implements Transformer<Player> {
     }
 
     return command.context()
-        .<CommandSender>expand(Identifier.identifier("source"))
+        .<CommandSender>expand(identifier("source"))
         .filter(commandSender -> commandSender instanceof Player)
         .map(commandSender -> server.getOnlinePlayers()
             .stream()
@@ -84,7 +84,7 @@ final class PlayerTransformer implements Transformer<Player> {
   private Result<Player> makeSureExistsAndVisible(String string, Context context,
       Parameter<Player> parameter, Player player, String translation) {
     if (player == null || (
-        context.expand(Identifier.identifier("source")).orElse(null) instanceof Player sender
+        context.expand(identifier("source")).orElse(null) instanceof Player sender
             && !sender.canSee(player))) {
       return Result.error(
           new ParameterArgumentException(translatable(translation, text(string)), parameter));

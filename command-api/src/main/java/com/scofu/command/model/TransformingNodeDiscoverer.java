@@ -1,5 +1,7 @@
 package com.scofu.command.model;
 
+import static com.scofu.command.model.Identifier.identifier;
+
 import com.google.common.collect.Maps;
 import com.google.inject.Inject;
 import com.scofu.command.Dispatcher;
@@ -89,8 +91,8 @@ public class TransformingNodeDiscoverer {
    */
   public <T> Node<?, ?> fromMethod(Method method, @Nullable T instance, Identified identified) {
     final var path = identified.value().split(" ");
-    final var identifier = Identifier.identifier(path[path.length - 1]);
-    final var fullyQualifiedIdentifier = Identifier.identifier(String.join(" ", path));
+    final var identifier = identifier(path[path.length - 1]);
+    final var fullyQualifiedIdentifier = identifier(String.join(" ", path));
     final var aliases = Stream.of(identified.aliases())
         .map(Identifier::identifier)
         .toArray(Identifier<?>[]::new);
@@ -110,7 +112,7 @@ public class TransformingNodeDiscoverer {
       return node;
     }
 
-    final var parentIdentifier = Identifier.identifier(
+    final var parentIdentifier = identifier(
         Stream.of(path).limit(path.length - 1).collect(Collectors.joining(" ")));
     final var parentNode = cache.get(parentIdentifier);
 

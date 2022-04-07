@@ -1,5 +1,7 @@
 package com.scofu.command.bukkit;
 
+import static com.scofu.command.model.Identifier.identifier;
+
 import com.scofu.command.Dispatcher;
 import com.scofu.command.model.Expansion;
 import com.scofu.command.model.Identifier;
@@ -51,7 +53,7 @@ final class ForwardingCommand extends BukkitCommand {
     final var context = new AudienceContext(commandSender, locale, helpMessageGenerator);
     context.map(Permission.HOLDER_IDENTIFIER)
         .to(permission -> commandSender.isOp() || commandSender.hasPermission(permission));
-    context.map(Identifier.identifier("source")).to(commandSender);
+    context.map(identifier("source")).to(commandSender);
     dispatcher.dispatchString(context, command);
     return false;
   }
@@ -68,7 +70,7 @@ final class ForwardingCommand extends BukkitCommand {
     final var context = new AudienceContext(commandSender, locale, helpMessageGenerator);
     context.map(Permission.HOLDER_IDENTIFIER)
         .to(permission -> commandSender.isOp() || commandSender.hasPermission(permission));
-    context.map(Identifier.identifier("source")).to(commandSender);
+    context.map(identifier("source")).to(commandSender);
     return dispatcher.suggestString(context, command).filter(s -> filtered(s, args)).toList();
   }
 

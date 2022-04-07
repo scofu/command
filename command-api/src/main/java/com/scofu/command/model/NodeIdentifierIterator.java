@@ -1,5 +1,7 @@
 package com.scofu.command.model;
 
+import static com.scofu.command.model.Identifier.identifier;
+
 import com.scofu.command.PeekableIterator;
 import java.util.function.Consumer;
 
@@ -43,7 +45,7 @@ public interface NodeIdentifierIterator {
           return false;
         }
         if (identifiersOrArguments.hasNext()) {
-          final var next = Identifier.identifier(identifiersOrArguments.peek().orElseThrow());
+          final var next = identifier(identifiersOrArguments.peek().orElseThrow());
           return parent.nodes().getOrDefault(next, parent.aliasedNodes().get(next)) != null;
         }
         return false;
@@ -51,7 +53,7 @@ public interface NodeIdentifierIterator {
 
       @Override
       public Identifier<?> next(NodeTree parent, Identifier<?> parentIdentifier) {
-        final var identifier = Identifier.identifier(identifiersOrArguments.next());
+        final var identifier = identifier(identifiersOrArguments.next());
         consumer.accept(identifier);
         return identifier;
       }
