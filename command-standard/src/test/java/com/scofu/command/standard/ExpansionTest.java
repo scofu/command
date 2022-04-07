@@ -1,5 +1,6 @@
 package com.scofu.command.standard;
 
+import static com.scofu.command.Context.simpleContext;
 import static com.scofu.command.model.Identifier.identifier;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -7,7 +8,6 @@ import com.google.inject.Inject;
 import com.google.inject.Stage;
 import com.scofu.app.Service;
 import com.scofu.app.bootstrap.BootstrapModule;
-import com.scofu.command.Context;
 import com.scofu.command.Dispatcher;
 import com.scofu.command.model.Expansion;
 import com.scofu.command.model.Identified;
@@ -30,7 +30,7 @@ public class ExpansionTest extends Service {
   @Test
   public void test() {
     load(Stage.PRODUCTION, this);
-    final var context = Context.simpleContext();
+    final var context = simpleContext();
     context.map(identifier("b")).to(34);
     final var one = dispatcher.dispatchString(context, "subtract 35");
     context.map(identifier("b")).toNothing();

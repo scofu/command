@@ -1,12 +1,12 @@
 package com.scofu.command.standard;
 
+import static com.scofu.command.Context.simpleContext;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.google.inject.Inject;
 import com.google.inject.Stage;
 import com.scofu.app.Service;
 import com.scofu.app.bootstrap.BootstrapModule;
-import com.scofu.command.Context;
 import com.scofu.command.Dispatcher;
 import com.scofu.command.model.Identified;
 import java.util.List;
@@ -29,9 +29,9 @@ public class EnumTest extends Service {
   @Test
   public void test() {
     load(Stage.PRODUCTION, this);
-    final var favoriteCat = dispatcher.dispatchString(Context.simpleContext(), "favorite cat");
-    final var favoriteDog = dispatcher.dispatchString(Context.simpleContext(), "favorite dog");
-    final var suggestions = dispatcher.suggestString(Context.simpleContext(), "favorite");
+    final var favoriteCat = dispatcher.dispatchString(simpleContext(), "favorite cat");
+    final var favoriteDog = dispatcher.dispatchString(simpleContext(), "favorite dog");
+    final var suggestions = dispatcher.suggestString(simpleContext(), "favorite");
     assertEquals("My favorite animal is cat.", favoriteCat);
     assertEquals("overridden", favoriteDog);
     assertEquals(List.of("cat", "dog", "dog"), suggestions.toList());

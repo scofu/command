@@ -1,5 +1,6 @@
 package com.scofu.command;
 
+import static com.scofu.command.Context.simpleContext;
 import static com.scofu.command.model.Identifier.identifier;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -68,9 +69,9 @@ public class DispatcherTest extends Service {
     load(Stage.PRODUCTION, this);
 
     final var toUpper = (Function<String, String>) (message -> dispatcher.dispatchString(
-        Context.simpleContext(), "test uppercase " + message));
+        simpleContext(), "test uppercase " + message));
     final var toLower = (Function<String, String>) (message -> dispatcher.dispatchString(
-        Context.simpleContext(), "test lowercase " + message));
+        simpleContext(), "test lowercase " + message));
     final var toUpperThenToLower = toUpper.andThen(toLower);
 
     assertEquals("HELLO", toUpper.apply("hello"));

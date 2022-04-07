@@ -1,5 +1,6 @@
 package com.scofu.command;
 
+import static com.scofu.command.Context.simpleContext;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.google.inject.Inject;
@@ -28,7 +29,7 @@ public class EscapableTest extends Service {
   @Test
   public void test() {
     load(Stage.PRODUCTION, this);
-    final var greeting = dispatcher.dispatchString(Context.simple(), "greet \"hello, \\u0025s!\"");
+    final var greeting = dispatcher.dispatchString(simpleContext(), "greet \"hello, \\u0025s!\"");
     assertEquals("hello, world!", greeting);
   }
 
