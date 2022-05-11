@@ -6,6 +6,7 @@ import com.scofu.command.model.DiscoveryListener;
 import com.scofu.command.model.Node;
 import com.scofu.command.text.HelpMessageGenerator;
 import com.scofu.command.validation.PermissionDiscoveryListener;
+import com.scofu.text.ThemeRegistry;
 import java.util.List;
 import org.bukkit.Server;
 
@@ -16,13 +17,15 @@ final class ForwardingDiscoveryListener implements DiscoveryListener {
   private final Server server;
   private final Dispatcher dispatcher;
   private final HelpMessageGenerator helpMessageGenerator;
+  private final ThemeRegistry themeRegistry;
 
   @Inject
   ForwardingDiscoveryListener(Server server, Dispatcher dispatcher,
-      HelpMessageGenerator helpMessageGenerator) {
+      HelpMessageGenerator helpMessageGenerator, ThemeRegistry themeRegistry) {
     this.server = server;
     this.dispatcher = dispatcher;
     this.helpMessageGenerator = helpMessageGenerator;
+    this.themeRegistry = themeRegistry;
   }
 
   @Override
@@ -37,6 +40,7 @@ final class ForwardingDiscoveryListener implements DiscoveryListener {
     }
     System.out.println("REGISTERING FORWARDING COMMAND: " + node.identifiers());
     server.getCommandMap()
-        .register(FALLBACK_PREFIX, new ForwardingCommand(node, dispatcher, helpMessageGenerator));
+        .register(FALLBACK_PREFIX,
+            new ForwardingCommand(node, dispatcher, helpMessageGenerator, themeRegistry));
   }
 }

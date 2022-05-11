@@ -1,7 +1,7 @@
 package com.scofu.command.text;
 
+import static com.scofu.text.ContextualizedComponent.error;
 import static net.kyori.adventure.text.Component.newline;
-import static net.kyori.adventure.text.Component.translatable;
 
 import com.scofu.command.Context;
 import com.scofu.command.DispatchHandleUnvalidatedException;
@@ -9,11 +9,11 @@ import com.scofu.command.ParameterException;
 import com.scofu.command.model.Expansion;
 import com.scofu.command.model.Identifier;
 import com.scofu.command.model.Node;
+import com.scofu.text.Theme;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.text.format.NamedTextColor;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -25,6 +25,7 @@ public class AudienceContext implements Context {
   private final Audience audience;
   private final Locale locale;
   private final HelpMessageGenerator helpMessageGenerator;
+  private final Theme theme;
 
   /**
    * Constructs a new audience based context.
@@ -32,12 +33,14 @@ public class AudienceContext implements Context {
    * @param audience             the audience
    * @param locale               the locale
    * @param helpMessageGenerator the help message generator
+   * @param theme                the theme
    */
   public AudienceContext(Audience audience, Locale locale,
-      HelpMessageGenerator helpMessageGenerator) {
+      HelpMessageGenerator helpMessageGenerator, Theme theme) {
     this.audience = audience;
     this.locale = locale;
     this.helpMessageGenerator = helpMessageGenerator;
+    this.theme = theme;
     this.expansions = new ConcurrentHashMap<>();
   }
 
@@ -47,14 +50,21 @@ public class AudienceContext implements Context {
   }
 
   @Override
+  public Theme theme() {
+    return theme;
+  }
+
+  @Override
   public <T, R> R onDispatchResolveError(Iterable<? extends Identifier<?>> identifiers, T argument,
       Throwable throwable) {
     if (throwable instanceof DispatchHandleUnvalidatedException unvalidatedException) {
-      audience.sendMessage(translatable("dispatch.resolve.unvalidated").color(NamedTextColor.RED));
+      error().text("dispatch.resolve.unvalidated")
+          .prefixed()
+          .renderTo(theme, audience::sendMessage);
       return null;
     }
 
-    audience.sendMessage(translatable("dispatch.resolve.error").color(NamedTextColor.RED));
+    error().text("dispatch.resolve.error").prefixed().renderTo(theme, audience::sendMessage);
     throwable.printStackTrace();
     return null;
   }
@@ -81,11 +91,11 @@ public class AudienceContext implements Context {
       audience.sendMessage(
           newline().append(helpMessageGenerator.generateFullUsage(this, identifiers, node, null))
               .append(newline())
-              .append(helpMessageGenerator.describeParameterError(parameterException))
+              .append(helpMessageGenerator.describeParameterError(parameterException, theme))
               .append(newline()));
       return null;
     }
-    audience.sendMessage(translatable("dispatch.invoke.error").color(NamedTextColor.RED));
+    error().text("dispatch.invoke.error").prefixed().renderTo(theme, audience::sendMessage);
     throwable.printStackTrace();
     return null;
   }

@@ -10,7 +10,6 @@ public class ParameterException extends DispatchException {
 
   private final Parameter<?> parameter;
 
-
   public ParameterException(Component message, Parameter<?> parameter) {
     super(message);
     this.parameter = parameter;

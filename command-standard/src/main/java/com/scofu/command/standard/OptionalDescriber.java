@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.scofu.command.model.Parameter;
 import com.scofu.command.text.Describer;
 import com.scofu.command.text.DescriberMap;
+import com.scofu.text.Theme;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Optional;
@@ -27,12 +28,12 @@ final class OptionalDescriber implements Describer<Optional> {
 
   @SuppressWarnings("unchecked")
   @Override
-  public Optional<Component> describe(Parameter<Optional> parameter) {
+  public Optional<Component> describe(Parameter<Optional> parameter, Theme theme) {
     final var argumentType = parameter.type() instanceof ParameterizedType parameterizedType
         && parameterizedType.getActualTypeArguments().length > 0
         ? parameterizedType.getActualTypeArguments()[0] : null;
     return Optional.ofNullable(argumentType)
         .flatMap(describerMap::get)
-        .flatMap(describer -> describer.describe((Parameter) parameter));
+        .flatMap(describer -> describer.describe((Parameter) parameter, theme));
   }
 }

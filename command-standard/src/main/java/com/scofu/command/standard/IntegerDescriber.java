@@ -4,10 +4,10 @@ import static net.kyori.adventure.text.Component.translatable;
 
 import com.scofu.command.model.Parameter;
 import com.scofu.command.text.Describer;
+import com.scofu.text.Theme;
 import java.lang.reflect.Type;
 import java.util.Optional;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 
 final class IntegerDescriber implements Describer<Integer> {
 
@@ -18,8 +18,8 @@ final class IntegerDescriber implements Describer<Integer> {
   }
 
   @Override
-  public Optional<Component> describe(Parameter<Integer> parameter) {
+  public Optional<Component> describe(Parameter<Integer> parameter, Theme theme) {
     return Optional.of(translatable("integer.parameter.description",
-        translatable(parameter.nameOrTranslation()).color(NamedTextColor.WHITE)));
+        translatable(parameter.nameOrTranslation()).color(theme.brightWhite())));
   }
 }

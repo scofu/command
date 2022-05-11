@@ -4,10 +4,10 @@ import static net.kyori.adventure.text.Component.translatable;
 
 import com.scofu.command.model.Parameter;
 import com.scofu.command.text.Describer;
+import com.scofu.text.Theme;
 import java.lang.reflect.Type;
 import java.util.Optional;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 
 final class BooleanDescriber implements Describer<Boolean> {
 
@@ -18,9 +18,9 @@ final class BooleanDescriber implements Describer<Boolean> {
   }
 
   @Override
-  public Optional<Component> describe(Parameter<Boolean> parameter) {
+  public Optional<Component> describe(Parameter<Boolean> parameter, Theme theme) {
     return Optional.of(translatable("boolean.parameter.description",
-        translatable(parameter.nameOrTranslation()).color(NamedTextColor.WHITE)).color(
-        NamedTextColor.GRAY));
+        translatable(parameter.nameOrTranslation()).color(theme.brightWhite())).color(
+        theme.white()));
   }
 }

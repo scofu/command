@@ -15,6 +15,7 @@ import com.scofu.command.model.Identifier;
 import com.scofu.command.model.Node;
 import com.scofu.command.model.Parameter;
 import com.scofu.command.validation.Validator;
+import com.scofu.text.Theme;
 import java.lang.reflect.ParameterizedType;
 import java.util.Comparator;
 import java.util.List;
@@ -24,7 +25,6 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent.Builder;
-import net.kyori.adventure.text.format.NamedTextColor;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -49,15 +49,16 @@ public class HelpMessageGenerator {
   /**
    * Returns a component describing the given exception.
    *
-   * @param parameterException the parameter exception.
+   * @param parameterException the parameter exception
+   * @param theme              the theme
    */
-  public Component describeParameterError(ParameterException parameterException) {
+  public Component describeParameterError(ParameterException parameterException, Theme theme) {
     final var builder = text();
     final var parameter = parameterException.parameter();
     builder.append(translatable("dispatch.invoke.parameter.error",
-        describeParameter(parameter).orElseGet(() -> translatable(parameter.nameOrTranslation())),
-        newline()));
-    describerParameterError(builder, parameterException);
+        describeParameter(parameter, theme).orElseGet(
+            () -> translatable(parameter.nameOrTranslation())), newline()));
+    describerParameterError(builder, parameterException, theme);
     return builder.build();
   }
 
@@ -79,29 +80,30 @@ public class HelpMessageGenerator {
     rootPathBuilder.append(helpMessageConfiguration.commandPrefix()
             .map(Component::text)
             .orElse(empty())
-            .color(NamedTextColor.GRAY))
+            .color(context.theme().white()))
         .append(StreamSupport.stream(identifiers.spliterator(), false)
             .map(Identifier::toPath)
             .map(Component::text)
             .collect(toComponent(space()))
-            .color(NamedTextColor.GRAY));
+            .color(context.theme().white()));
     if (node.target() != null) {
-      rootParameters.append(describeParameters(node).orElse(empty()).color(NamedTextColor.WHITE));
+      rootParameters.append(describeParameters(node, context.theme()).orElse(empty())
+          .color(context.theme().brightWhite()));
     }
     if (node.nodes(context, validators).isEmpty()) {
-      return usageGenerator.generate(node, rootPathBuilder.build(), rootParameters.build());
+      return usageGenerator.generate(context.theme(), node, rootPathBuilder.build(),
+          rootParameters.build());
     } else {
       final var resultBuilder = text();
       final var rootPathComponent = rootPathBuilder.build();
       if (lastTestedIdentifier != null) {
         resultBuilder.append(
             translatable("dispatch.invoke.unknown_subcommand", text(lastTestedIdentifier.toPath()),
-                rootPathComponent, newline()).color(NamedTextColor.RED));
+                rootPathComponent, newline()).color(context.theme().brightRed()));
       }
       if (node.target() != null) {
-        resultBuilder.append(
-                usageGenerator.generate(node, rootPathComponent, rootParameters.build()))
-            .append(newline());
+        resultBuilder.append(usageGenerator.generate(context.theme(), node, rootPathComponent,
+            rootParameters.build())).append(newline());
       }
       resultBuilder.append(node.nodes(context, validators)
           .stream()
@@ -115,62 +117,66 @@ public class HelpMessageGenerator {
     }
   }
 
-  private void describerParameterError(Builder builder, ParameterException parameterException) {
+  private void describerParameterError(Builder builder, ParameterException parameterException,
+      Theme theme) {
     if (parameterException.getCause() instanceof ParameterException cause) {
-      describerParameterError(builder, cause);
+      describerParameterError(builder, cause, theme);
     } else if (parameterException.getCause() != null) {
-      builder.append(text("⚠ ").color(NamedTextColor.RED))
-          .append(text(parameterException.getCause().getMessage()).color(NamedTextColor.RED));
+      builder.append(text("⚠ ").color(theme.brightRed()))
+          .append(text(parameterException.getCause().getMessage()).color(theme.brightRed()));
     } else {
-      builder.append(text("⚠ ").color(NamedTextColor.RED))
-          .append(parameterException.message().color(NamedTextColor.RED));
+      builder.append(text("⚠ ").color(theme.brightRed()))
+          .append(parameterException.message().color(theme.brightRed()));
     }
   }
 
   @SuppressWarnings("unchecked")
-  private <T> Optional<Component> describeParameter(Parameter<T> parameter) {
+  private <T> Optional<Component> describeParameter(Parameter<T> parameter, Theme theme) {
     if (parameter.type() instanceof ParameterizedType parameterizedType
         && parameterizedType.getRawType() instanceof Class type) {
       if (Optional.class.isAssignableFrom(type)
           && parameterizedType.getActualTypeArguments().length > 0) {
         final var typeArgument = parameterizedType.getActualTypeArguments()[0];
         return describerMap.get(typeArgument)
-            .flatMap(describer -> ((Describer<T>) describer).describe(parameter));
+            .flatMap(describer -> ((Describer<T>) describer).describe(parameter, theme));
       }
     }
     return describerMap.get(parameter.type())
-        .flatMap(describer -> ((Describer<T>) describer).describe(parameter));
+        .flatMap(describer -> ((Describer<T>) describer).describe(parameter, theme));
   }
 
   @SuppressWarnings("unchecked")
-  private <T> Optional<Component> describeParameterWithBrackets(Parameter<T> parameter) {
+  private <T> Optional<Component> describeParameterWithBrackets(Parameter<T> parameter,
+      Theme theme) {
     if (parameter.type() instanceof ParameterizedType parameterizedType
         && parameterizedType.getRawType() instanceof Class type) {
       if (Optional.class.isAssignableFrom(type)
           && parameterizedType.getActualTypeArguments().length > 0) {
         final var typeArgument = parameterizedType.getActualTypeArguments()[0];
         return describerMap.get(typeArgument)
-            .flatMap(describer -> ((Describer<T>) describer).describe(parameter))
+            .flatMap(describer -> ((Describer<T>) describer).describe(parameter, theme))
             .map(component -> translatable("parameter.optional.format",
                 translatable("parameter.optional.prefix"), component,
                 translatable("parameter.optional.suffix")));
       }
     }
     return describerMap.get(parameter.type())
-        .flatMap(describer -> ((Describer<T>) describer).describe(parameter))
+        .flatMap(describer -> ((Describer<T>) describer).describe(parameter, theme))
         .map(component -> translatable("parameter.required.format",
             translatable("parameter.required.prefix"), component,
             translatable("parameter.required.suffix")));
   }
 
-  private <T, R> Optional<Component> describeParameters(Node<T, R> node) {
-    return Optional.ofNullable(node.handle()).map(Handle::parameters).map(this::describeParameters);
+  private <T, R> Optional<Component> describeParameters(Node<T, R> node, Theme theme) {
+    return Optional.ofNullable(node.handle())
+        .map(Handle::parameters)
+        .map(parameters -> describeParameters(parameters, theme));
   }
 
-  private Component describeParameters(List<Parameter<?>> parameters) {
+  private Component describeParameters(List<Parameter<?>> parameters, Theme theme) {
     Component component = null;
     for (Parameter<?> parameter : parameters) {
-      final var parameterComponent = describeParameterWithBrackets(parameter).orElse(null);
+      final var parameterComponent = describeParameterWithBrackets(parameter, theme).orElse(null);
       if (parameterComponent == null) {
         continue;
       }
