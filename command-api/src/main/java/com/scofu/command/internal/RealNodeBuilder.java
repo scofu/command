@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
+import javax.annotation.Nullable;
 
 /** Real node builder. */
 public class RealNodeBuilder<T, R> implements NodeBuilder<T, R> {
@@ -69,11 +70,9 @@ public class RealNodeBuilder<T, R> implements NodeBuilder<T, R> {
    * @param identifiers the identifiers
    */
   public static <T, R> RealNodeBuilder<T, R> newRealNodeBuilder(
-      NodeBuilder<?, ?> parent,
-      Consumer<Node<?, ?>> consumer,
+      @Nullable NodeBuilder<?, ?> parent,
+      @Nullable Consumer<Node<?, ?>> consumer,
       List<? extends Identifier<?>> identifiers) {
-    checkNotNull(parent, "parent");
-    checkNotNull(consumer, "consumer");
     checkNotNull(identifiers, "identifiers");
     return new RealNodeBuilder<T, R>(parent, consumer, identifiers);
   }
