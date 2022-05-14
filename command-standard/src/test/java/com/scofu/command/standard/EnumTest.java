@@ -14,13 +14,10 @@ import java.util.List;
 import java.util.Locale;
 import org.junit.jupiter.api.Test;
 
-/**
- * Tests enums in commands.
- */
+/** Tests enums in commands. */
 public class EnumTest extends Service {
 
-  @Inject
-  private Dispatcher dispatcher;
+  @Inject private Dispatcher dispatcher;
 
   @Override
   protected void configure() {
@@ -48,5 +45,4 @@ public class EnumTest extends Service {
   String overridden() {
     return "overridden";
   }
-
 }

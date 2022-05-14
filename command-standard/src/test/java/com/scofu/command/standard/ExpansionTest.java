@@ -14,13 +14,10 @@ import com.scofu.command.model.Identified;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
-/**
- * Tests {@link Optional} in commands.
- */
+/** Tests {@link Optional} in commands. */
 public class ExpansionTest extends Service {
 
-  @Inject
-  private Dispatcher dispatcher;
+  @Inject private Dispatcher dispatcher;
 
   @Override
   protected void configure() {
@@ -43,5 +40,4 @@ public class ExpansionTest extends Service {
   int subtract(int a, @Identified("b") Expansion<Integer> b) {
     return a - b.get().orElse(0);
   }
-
 }

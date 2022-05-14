@@ -13,9 +13,7 @@ import com.scofu.command.validation.PermissionValidator;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
 
-/**
- * Tests {@link com.scofu.command.model.Node}.
- */
+/** Tests {@link com.scofu.command.model.Node}. */
 public class NodeTest {
 
   @Test
@@ -27,45 +25,48 @@ public class NodeTest {
 
   @Test
   public void testChild() throws Throwable {
-    final var test = Node.builder(identifier("test"))
-        .withChild(identifier("child"))
-        .endChild()
-        .build();
-    final var childResult = test.validateDirectChildByIdentifier(simpleContext(), Set.of(), true,
-        identifier("child"));
+    final var test =
+        Node.builder(identifier("test")).withChild(identifier("child")).endChild().build();
+    final var childResult =
+        test.validateDirectChildByIdentifier(simpleContext(), Set.of(), true, identifier("child"));
     assertFalse(childResult.hasError());
     assertSame(childResult.get(), test.nodes().get(identifier("child")));
   }
 
   @Test
   public void testValidateChildNoPermission() throws Throwable {
-    final var test = Node.builder(identifier("test"))
-        .withChild(identifier("child"))
-        .map(Permission.PERMISSION_IDENTIFIER)
-        .to("test.permission")
-        .endChild()
-        .build();
+    final var test =
+        Node.builder(identifier("test"))
+            .withChild(identifier("child"))
+            .map(Permission.PERMISSION_IDENTIFIER)
+            .to("test.permission")
+            .endChild()
+            .build();
     final var context = simpleContext().map(Permission.HOLDER_IDENTIFIER).to(permission -> false);
-    final var childResult = test.validateDirectChildByIdentifier(context,
-        Set.of(new PermissionValidator()), true, identifier("child"));
+    final var childResult =
+        test.validateDirectChildByIdentifier(
+            context, Set.of(new PermissionValidator()), true, identifier("child"));
     assertTrue(childResult.hasError());
     assertTrue(childResult.theError() instanceof DispatchHandleUnvalidatedException);
   }
 
   @Test
   public void testValidateChildWithPermission() throws Throwable {
-    final var node = Node.builder(identifier("test"))
-        .withChild(identifier("child"))
-        .map(Permission.PERMISSION_IDENTIFIER)
-        .to("test.permission")
-        .endChild()
-        .build();
-    final var context = simpleContext().map(Permission.HOLDER_IDENTIFIER)
-        .to(permission -> permission.equals("test.permission"));
-    final var childResult = node.validateDirectChildByIdentifier(context,
-        Set.of(new PermissionValidator()), true, identifier("child"));
+    final var node =
+        Node.builder(identifier("test"))
+            .withChild(identifier("child"))
+            .map(Permission.PERMISSION_IDENTIFIER)
+            .to("test.permission")
+            .endChild()
+            .build();
+    final var context =
+        simpleContext()
+            .map(Permission.HOLDER_IDENTIFIER)
+            .to(permission -> permission.equals("test.permission"));
+    final var childResult =
+        node.validateDirectChildByIdentifier(
+            context, Set.of(new PermissionValidator()), true, identifier("child"));
     assertFalse(childResult.hasError());
     assertSame(childResult.get(), node.nodes().get(identifier("child")));
   }
-
 }

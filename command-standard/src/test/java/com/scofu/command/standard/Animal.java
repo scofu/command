@@ -1,8 +1,7 @@
 package com.scofu.command.standard;
 
-/**
- * Animal.
- */
+/** Animal. */
 public enum Animal {
-  CAT, DOG
+  CAT,
+  DOG
 }

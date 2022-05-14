@@ -12,13 +12,10 @@ import com.scofu.command.model.Identified;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
-/**
- * Tests {@link java.util.Optional} in commands.
- */
+/** Tests {@link java.util.Optional} in commands. */
 public class OptionalTest extends Service {
 
-  @Inject
-  private Dispatcher dispatcher;
+  @Inject private Dispatcher dispatcher;
 
   @Override
   protected void configure() {
@@ -38,5 +35,4 @@ public class OptionalTest extends Service {
   int add(int a, Optional<Integer> b) {
     return a + b.orElse(0);
   }
-
 }

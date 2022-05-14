@@ -18,13 +18,10 @@ import java.util.Locale;
 import java.util.function.Function;
 import org.junit.jupiter.api.Test;
 
-/**
- * Tests the {@link Dispatcher}.
- */
+/** Tests the {@link Dispatcher}. */
 public class DispatcherTest extends Service {
 
-  @Inject
-  private Dispatcher dispatcher;
+  @Inject private Dispatcher dispatcher;
 
   @Override
   protected void configure() {
@@ -32,51 +29,55 @@ public class DispatcherTest extends Service {
     bindFeature(StringTransformer.class).in(Scopes.SINGLETON);
 
     // discovered
-    bindFeatureInstance(new Feature() {
-      @Identified(value = "test", futile = true)
-      void root() {
-      }
+    bindFeatureInstance(
+        new Feature() {
+          @Identified(value = "test", futile = true)
+          void root() {}
 
-      @Identified("test uppercase")
-      String uppercase(String message) {
-        return message.toUpperCase(Locale.ROOT);
-      }
-    });
+          @Identified("test uppercase")
+          String uppercase(String message) {
+            return message.toUpperCase(Locale.ROOT);
+          }
+        });
 
     // manual
     final var dispatcherProvider = getProvider(Dispatcher.class);
-    bindFeatureInstance(new Feature() {
-      @Override
-      public void enable() {
-        final var target = (Target<List<String>, String>) (command, argument) -> argument.get(0)
-            .toLowerCase(Locale.ROOT);
-        final var node = Node.builder(identifier("lowercase"))
-            .withHandle()
-            .withParameter()
-            .withName("message")
-            .withType(String.class)
-            .endParameter()
-            .endHandle()
-            .withTarget(target)
-            .build();
-        dispatcherProvider.get().nodes().get(identifier("test")).register(node);
-      }
-    });
+    bindFeatureInstance(
+        new Feature() {
+          @Override
+          public void enable() {
+            final var target =
+                (Target<List<String>, String>)
+                    (command, argument) -> argument.get(0).toLowerCase(Locale.ROOT);
+            final var node =
+                Node.builder(identifier("lowercase"))
+                    .withHandle()
+                    .withParameter()
+                    .withName("message")
+                    .withType(String.class)
+                    .endParameter()
+                    .endHandle()
+                    .withTarget(target)
+                    .build();
+            dispatcherProvider.get().nodes().get(identifier("test")).register(node);
+          }
+        });
   }
 
   @Test()
   public void test() {
     load(Stage.PRODUCTION, this);
 
-    final var toUpper = (Function<String, String>) (message -> dispatcher.dispatchString(
-        simpleContext(), "test uppercase " + message));
-    final var toLower = (Function<String, String>) (message -> dispatcher.dispatchString(
-        simpleContext(), "test lowercase " + message));
+    final var toUpper =
+        (Function<String, String>)
+            (message -> dispatcher.dispatchString(simpleContext(), "test uppercase " + message));
+    final var toLower =
+        (Function<String, String>)
+            (message -> dispatcher.dispatchString(simpleContext(), "test lowercase " + message));
     final var toUpperThenToLower = toUpper.andThen(toLower);
 
     assertEquals("HELLO", toUpper.apply("hello"));
     assertEquals("hello", toLower.apply("HELLO"));
     assertEquals("hello", toUpperThenToLower.apply("hello"));
   }
-
 }

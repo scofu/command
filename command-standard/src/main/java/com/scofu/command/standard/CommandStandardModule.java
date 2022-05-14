@@ -6,9 +6,7 @@ import com.scofu.common.inject.annotation.Module;
 import com.scofu.text.BundledTranslationProvider;
 import java.util.Locale;
 
-/**
- * Binds standard describers and transformers.
- */
+/** Binds standard describers and transformers. */
 @Module
 public class CommandStandardModule extends AbstractFeatureModule {
 
@@ -30,7 +28,8 @@ public class CommandStandardModule extends AbstractFeatureModule {
     bindFeature(OptionalTransformer.class).in(Scopes.SINGLETON);
     bindFeature(StringTransformer.class).in(Scopes.SINGLETON);
 
-    bindFeatureInstance(new BundledTranslationProvider(Locale.US, "command-standard_en_US",
-        CommandStandardModule.class.getClassLoader()));
+    bindFeatureInstance(
+        new BundledTranslationProvider(
+            Locale.US, "command-standard_en_US", CommandStandardModule.class.getClassLoader()));
   }
 }

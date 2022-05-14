@@ -12,13 +12,10 @@ import com.scofu.command.model.Identified;
 import com.scofu.command.target.Escapable;
 import org.junit.jupiter.api.Test;
 
-/**
- * Tests {@link com.scofu.command.target.Escapable} in commands.
- */
+/** Tests {@link com.scofu.command.target.Escapable} in commands. */
 public class EscapableTest extends Service {
 
-  @Inject
-  private Dispatcher dispatcher;
+  @Inject private Dispatcher dispatcher;
 
   @Override
   protected void configure() {
@@ -37,5 +34,4 @@ public class EscapableTest extends Service {
   String format(@Escapable String greeting) {
     return greeting.formatted("world");
   }
-
 }

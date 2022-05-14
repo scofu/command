@@ -15,8 +15,8 @@ final class StringTransformer implements Transformer<String> {
   }
 
   @Override
-  public Result<String> transform(Command command, Parameter<String> parameter,
-      Parameters parameters, Arguments arguments) {
+  public Result<String> transform(
+      Command command, Parameter<String> parameter, Parameters parameters, Arguments arguments) {
     return arguments.nextQuotable(parameter);
   }
 }

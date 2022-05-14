@@ -1,13 +1,8 @@
 package com.scofu.command.standard;
 
-/**
- * A translated enum.
- */
+/** A translated enum. */
 public interface TranslatedEnum {
 
-  /**
-   * Returns the translation key.
-   */
+  /** Returns the translation key. */
   String translation();
-
 }
