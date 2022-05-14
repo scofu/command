@@ -1,5 +1,7 @@
 package com.scofu.command;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import com.scofu.command.model.Handle;
 import com.scofu.command.model.Node;
 import net.kyori.adventure.text.Component;
@@ -19,6 +21,9 @@ public class DispatchHandleUnvalidatedException extends DispatchException {
    */
   public DispatchHandleUnvalidatedException(Component message, Handle handle, Node<?, ?> node) {
     super(message);
+    checkNotNull(message, "message");
+    checkNotNull(handle, "handle");
+    checkNotNull(node, "node");
     this.handle = handle;
     this.node = node;
   }
@@ -34,6 +39,10 @@ public class DispatchHandleUnvalidatedException extends DispatchException {
   public DispatchHandleUnvalidatedException(
       Component message, Throwable cause, Handle handle, Node<?, ?> node) {
     super(message, cause);
+    checkNotNull(message, "message");
+    checkNotNull(cause, "cause");
+    checkNotNull(handle, "handle");
+    checkNotNull(node, "node");
     this.handle = handle;
     this.node = node;
   }

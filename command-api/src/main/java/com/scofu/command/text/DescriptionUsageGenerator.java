@@ -1,5 +1,6 @@
 package com.scofu.command.text;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static net.kyori.adventure.text.Component.text;
 
 import com.scofu.command.model.Node;
@@ -12,6 +13,10 @@ public class DescriptionUsageGenerator implements UsageGenerator {
   @Override
   public <T, R> Component generate(
       Theme theme, Node<T, R> node, Component path, Component parameters) {
+    checkNotNull(theme, "theme");
+    checkNotNull(node, "node");
+    checkNotNull(path, "path");
+    checkNotNull(parameters, "parameters");
     return node.expand(Description.DESCRIPTION_IDENTIFIER)
         .map(Component::translatable)
         .map(

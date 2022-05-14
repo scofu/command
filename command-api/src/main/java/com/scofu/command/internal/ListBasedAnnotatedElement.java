@@ -1,5 +1,7 @@
 package com.scofu.command.internal;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
 import java.util.List;
@@ -18,6 +20,7 @@ public class ListBasedAnnotatedElement implements AnnotatedElement {
    * @param annotations the annotations
    */
   public ListBasedAnnotatedElement(List<Annotation> annotations) {
+    checkNotNull(annotations, "annotations");
     this.annotations =
         annotations.stream()
             .collect(Collectors.toMap(Annotation::annotationType, Function.identity()));

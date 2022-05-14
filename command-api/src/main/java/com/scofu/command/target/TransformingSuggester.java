@@ -1,5 +1,6 @@
 package com.scofu.command.target;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.Component.translatable;
 
@@ -25,6 +26,7 @@ public class TransformingSuggester implements Suggester<List<String>> {
   @SuppressWarnings({"unchecked", "ConstantConditions", "rawtypes"})
   @Override
   public Stream<String> suggest(Command command, List<String> argument) {
+    checkNotNull(command, "command");
     final var arguments =
         RealArguments.newRealArguments(
             (argument == null ? List.<String>of() : argument).iterator());

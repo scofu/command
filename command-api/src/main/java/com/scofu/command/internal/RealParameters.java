@@ -1,5 +1,7 @@
 package com.scofu.command.internal;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import com.scofu.command.Parameters;
 import com.scofu.command.model.Parameter;
 import java.util.Iterator;
@@ -19,6 +21,7 @@ public class RealParameters implements Parameters {
    * @param iterator the iterator
    */
   public static RealParameters newRealParameters(Iterator<Parameter<?>> iterator) {
+    checkNotNull(iterator, "iterator");
     return new RealParameters(iterator);
   }
 

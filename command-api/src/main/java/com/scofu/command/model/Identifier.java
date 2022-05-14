@@ -1,5 +1,7 @@
 package com.scofu.command.model;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.util.stream.Stream;
 
 /**
@@ -19,6 +21,7 @@ public interface Identifier<T> {
    * @param <R>   the type of the value
    */
   static <T, R> Identifier<T> identifier(R value) {
+    checkNotNull(value, "value");
     return new Basic<>(value);
   }
 
@@ -29,6 +32,8 @@ public interface Identifier<T> {
    * @param extra the extra idenfitiers
    */
   static Iterable<? extends Identifier<?>> chain(Object first, Object... extra) {
+    checkNotNull(first, "first");
+    checkNotNull(extra, "extra");
     return Stream.concat(Stream.of(first), Stream.of(extra)).map(Identifier::identifier).toList();
   }
 

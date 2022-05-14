@@ -1,5 +1,7 @@
 package com.scofu.command;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import com.scofu.command.model.Parameter;
 import net.kyori.adventure.text.Component;
 
@@ -10,11 +12,16 @@ public class ParameterException extends DispatchException {
 
   public ParameterException(Component message, Parameter<?> parameter) {
     super(message);
+    checkNotNull(message, "message");
+    checkNotNull(parameter, "parameter");
     this.parameter = parameter;
   }
 
   public ParameterException(Component message, Throwable cause, Parameter<?> parameter) {
     super(message, cause);
+    checkNotNull(message, "message");
+    checkNotNull(cause, "cause");
+    checkNotNull(parameter, "parameter");
     this.parameter = parameter;
   }
 

@@ -1,5 +1,7 @@
 package com.scofu.command;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import com.scofu.command.model.NodeTree;
 import java.util.List;
 import java.util.stream.Collector;
@@ -37,6 +39,8 @@ public interface Dispatcher extends NodeTree {
    * @param <R> the type of the result
    */
   default <R> R dispatchString(Context context, String string) {
+    checkNotNull(context, "context");
+    checkNotNull(string, "string");
     return dispatch(context, List.of(string.split(" ")), Collectors.toList());
   }
 
@@ -68,6 +72,8 @@ public interface Dispatcher extends NodeTree {
    * @param string the string
    */
   default Stream<String> suggestString(Context context, String string) {
+    checkNotNull(context, "context");
+    checkNotNull(string, "string");
     if (string.endsWith(" ")) {
       return suggest(
           context,

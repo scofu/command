@@ -1,5 +1,6 @@
 package com.scofu.command.internal;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static com.scofu.command.model.Identifier.identifier;
 import static net.kyori.adventure.text.Component.translatable;
 
@@ -44,6 +45,9 @@ public class RealDispatcher implements Dispatcher {
   @SuppressWarnings("unchecked")
   public <T, U, R> R dispatch(
       Context context, List<U> objects, Collector<? super U, ?, T> collector) {
+    checkNotNull(context, "context");
+    checkNotNull(objects, "objects");
+    checkNotNull(collector, "collector");
     final var identifiersOrArguments = PeekableIterator.wrap(objects.iterator());
     if (!identifiersOrArguments.hasNext()) {
       throw new DispatchException(translatable("dispatch.no_identifiers_or_arguments"));
@@ -88,6 +92,9 @@ public class RealDispatcher implements Dispatcher {
   @Override
   public <T, U, R> Stream<String> suggest(
       Context context, List<U> objects, Collector<? super U, ?, T> collector) {
+    checkNotNull(context, "context");
+    checkNotNull(objects, "objects");
+    checkNotNull(collector, "collector");
     final var identifiersOrArguments = PeekableIterator.wrap(objects.iterator());
     if (!identifiersOrArguments.hasNext()) {
       throw new DispatchException(translatable("dispatch.no_identifiers_or_arguments"));

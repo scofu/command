@@ -1,5 +1,7 @@
 package com.scofu.command.internal;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import com.scofu.command.model.DiscoveryConfiguration;
 import java.util.concurrent.ExecutorService;
 
@@ -19,6 +21,7 @@ public class RealDiscoveryConfiguration implements DiscoveryConfiguration {
    */
   public static RealDiscoveryConfiguration newRealDiscoveryConfiguration(
       ExecutorService executorService) {
+    checkNotNull(executorService, "executorService");
     return new RealDiscoveryConfiguration(executorService);
   }
 

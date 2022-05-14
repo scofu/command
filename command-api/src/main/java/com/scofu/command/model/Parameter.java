@@ -1,5 +1,7 @@
 package com.scofu.command.model;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import com.scofu.command.ForwardingAnnotatedElement;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Type;
@@ -19,6 +21,7 @@ public record Parameter<T>(String nameOrTranslation, Type type,
    * @param type the type
    */
   public Parameter<T> withType(Type type) {
+    checkNotNull(type, "type");
     return new Parameter<>(nameOrTranslation, type, annotatedElement);
   }
 
@@ -38,6 +41,7 @@ public record Parameter<T>(String nameOrTranslation, Type type,
    * @param annotatedElement the annotated element
    */
   public Parameter<T> withAnnotatedElement(AnnotatedElement annotatedElement) {
+    checkNotNull(annotatedElement, "annotatedElement");
     return new Parameter<>(nameOrTranslation, type, annotatedElement);
   }
 

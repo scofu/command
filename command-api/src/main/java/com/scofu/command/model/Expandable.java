@@ -1,5 +1,7 @@
 package com.scofu.command.model;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import com.scofu.command.internal.RealExpansionBuilder;
 import java.util.Map;
 import java.util.Optional;
@@ -22,6 +24,7 @@ public interface Expandable<R extends Expandable<R>> {
    */
   @SuppressWarnings("unchecked")
   default <T> Optional<T> expand(Identifier<T> identifier) {
+    checkNotNull(identifier, "identifier");
     return Optional.ofNullable(expansions().get(identifier))
         .map(o -> (Expansion<T>) o)
         .flatMap(Expansion::get);
@@ -35,6 +38,7 @@ public interface Expandable<R extends Expandable<R>> {
    */
   @SuppressWarnings("unchecked")
   default <T> ExpansionBuilder<T, R> map(Identifier<T> identifier) {
+    checkNotNull(identifier, "identifier");
     return RealExpansionBuilder.newRealExpansionBuilder(
         expansion -> expansions().put(identifier, expansion), (R) this);
   }

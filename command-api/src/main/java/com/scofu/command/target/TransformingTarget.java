@@ -1,5 +1,6 @@
 package com.scofu.command.target;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.Component.translatable;
 
@@ -24,6 +25,7 @@ public class TransformingTarget implements Target<List<String>, Object[]> {
   @SuppressWarnings("unchecked")
   @Override
   public Object[] invoke(Command command, List<String> argument) throws Throwable {
+    checkNotNull(command, "command");
     final var arguments =
         RealArguments.newRealArguments(
             (argument == null ? List.<String>of() : argument).iterator());

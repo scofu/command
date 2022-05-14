@@ -1,5 +1,7 @@
 package com.scofu.command.target;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.lang.reflect.Method;
 
 /**
@@ -13,6 +15,7 @@ public class MethodTarget<R> implements Target<Object[], R> {
   private final Object instance;
 
   public MethodTarget(Method method, Object instance) {
+    checkNotNull(method, "method");
     this.method = method;
     this.instance = instance;
   }

@@ -1,5 +1,7 @@
 package com.scofu.command;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.util.Iterator;
 import java.util.Optional;
 
@@ -24,6 +26,7 @@ public class PeekableIterator<T> implements Iterator<T> {
    * @param <T> the type of the elements
    */
   public static <T> PeekableIterator<T> wrap(Iterator<T> iterator) {
+    checkNotNull(iterator, "iterator");
     return new PeekableIterator<>(iterator);
   }
 

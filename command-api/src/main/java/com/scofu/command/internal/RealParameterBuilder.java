@@ -1,5 +1,7 @@
 package com.scofu.command.internal;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import com.scofu.command.model.HandleBuilder;
 import com.scofu.command.model.Parameter;
 import com.scofu.command.model.ParameterBuilder;
@@ -33,6 +35,8 @@ public class RealParameterBuilder<T, R> implements ParameterBuilder<T, R> {
    */
   public static <T, R> RealParameterBuilder<T, R> newRealParameterBuilder(
       HandleBuilder<T, R> handleBuilder, Consumer<Parameter<?>> consumer) {
+    checkNotNull(handleBuilder, "handleBuilder");
+    checkNotNull(consumer, "consumer");
     return new RealParameterBuilder<T, R>(handleBuilder, consumer);
   }
 

@@ -1,5 +1,6 @@
 package com.scofu.command.text;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.Component.newline;
 import static net.kyori.adventure.text.Component.space;
@@ -53,6 +54,8 @@ public class HelpMessageGenerator {
    * @param theme              the theme
    */
   public Component describeParameterError(ParameterException parameterException, Theme theme) {
+    checkNotNull(parameterException, "parameterException");
+    checkNotNull(theme, "theme");
     final var builder = text();
     final var parameter = parameterException.parameter();
     builder.append(translatable("dispatch.invoke.parameter.error",
@@ -75,6 +78,9 @@ public class HelpMessageGenerator {
   public <T, R> Component generateFullUsage(Context context,
       Iterable<? extends Identifier<?>> identifiers, Node<T, R> node,
       @Nullable Identifier<?> lastTestedIdentifier) {
+    checkNotNull(context, "context");
+    checkNotNull(identifiers, "identifiers");
+    checkNotNull(node, "node");
     final var rootPathBuilder = text();
     final var rootParameters = text();
     rootPathBuilder.append(helpMessageConfiguration.commandPrefix()

@@ -1,5 +1,7 @@
 package com.scofu.command;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -19,6 +21,7 @@ public interface Result<T> {
    * @param <T>       the type of the value
    */
   static <T> Result<T> error(Throwable throwable) {
+    checkNotNull(throwable, "throwable");
     return new Error<>(throwable);
   }
 
@@ -30,6 +33,8 @@ public interface Result<T> {
    * @param <T>       the type of the value
    */
   static <T> Result<T> errorValue(Throwable throwable, T value) {
+    checkNotNull(throwable, "throwable");
+    checkNotNull(value, "value");
     return new ErrorValue<>(throwable, value);
   }
 
@@ -40,6 +45,7 @@ public interface Result<T> {
    * @param <T>   the type of the value
    */
   static <T> Result<T> value(T value) {
+    checkNotNull(value, "value");
     return new Value<>(value);
   }
 
@@ -50,6 +56,7 @@ public interface Result<T> {
    * @param <T>      the type of the value
    */
   static <T> Result<T> lazy(Supplier<T> supplier) {
+    checkNotNull(supplier, "supplier");
     return new Lazy<>(supplier);
   }
 
@@ -95,6 +102,7 @@ public interface Result<T> {
    * @param consumer the consumer
    */
   default Result<T> onError(Consumer<Throwable> consumer) {
+    checkNotNull(consumer, "consumer");
     if (hasError()) {
       consumer.accept(theError());
     }

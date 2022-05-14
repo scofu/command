@@ -1,5 +1,6 @@
 package com.scofu.command.internal;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static net.kyori.adventure.text.Component.translatable;
 
 import com.scofu.command.ParameterArgumentException;
@@ -29,6 +30,7 @@ public class RealArguments implements Arguments {
    * @param iterator the iterator
    */
   public static RealArguments newRealArguments(Iterator<String> iterator) {
+    checkNotNull(iterator, "iterator");
     return new RealArguments(iterator);
   }
 
@@ -49,6 +51,7 @@ public class RealArguments implements Arguments {
 
   @Override
   public <T> Result<String> nextQuotable(Parameter<T> parameter) {
+    checkNotNull(parameter, "parameter");
     final var escapable = parameter.isAnnotationPresent(Escapable.class);
     final var builder = new StringBuilder();
     var expectingEnclosingQuote = false;

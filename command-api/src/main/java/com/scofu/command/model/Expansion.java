@@ -1,5 +1,7 @@
 package com.scofu.command.model;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -27,6 +29,7 @@ public interface Expansion<T> {
    * @param <T> the type of the value
    */
   static <T> Expansion<T> value(T value) {
+    checkNotNull(value, "value");
     return new Value<>(Optional.of(value));
   }
 
@@ -37,6 +40,7 @@ public interface Expansion<T> {
    * @param <T> the type of the value
    */
   static <T> Expansion<T> optional(Optional<T> value) {
+    checkNotNull(value, "value");
     return new Value<>(value);
   }
 
@@ -47,6 +51,7 @@ public interface Expansion<T> {
    * @param <T> the type of the value
    */
   static <T> Expansion<T> lazy(Supplier<T> supplier) {
+    checkNotNull(supplier, "supplier");
     return new Lazy<>(supplier);
   }
 

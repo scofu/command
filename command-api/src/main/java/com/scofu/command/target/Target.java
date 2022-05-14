@@ -1,5 +1,7 @@
 package com.scofu.command.target;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.util.function.Consumer;
 
 /**
@@ -22,6 +24,7 @@ public interface Target<T, R> {
    * @param <V> the type of the new output
    */
   default <V> Target<T, V> then(Target<R, V> target) {
+    checkNotNull(target, "target");
     return (command, argument) -> target.invoke(command, invoke(command, argument));
   }
 
@@ -32,6 +35,7 @@ public interface Target<T, R> {
    * @param consumer the consumer
    */
   default Target<T, R> then(Consumer<R> consumer) {
+    checkNotNull(consumer, "consumer");
     return then(
         (command, argument) -> {
           consumer.accept(argument);
@@ -49,6 +53,7 @@ public interface Target<T, R> {
    * @param <V> the type of the new input
    */
   default <V> Target<V, R> compose(Target<V, T> target) {
+    checkNotNull(target, "target");
     return (command, argument) -> invoke(command, target.invoke(command, argument));
   }
 }

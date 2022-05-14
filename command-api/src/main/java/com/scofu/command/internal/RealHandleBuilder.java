@@ -1,5 +1,7 @@
 package com.scofu.command.internal;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import com.scofu.command.model.Handle;
 import com.scofu.command.model.HandleBuilder;
 import com.scofu.command.model.NodeBuilder;
@@ -33,6 +35,8 @@ public class RealHandleBuilder<T, R> implements HandleBuilder<T, R> {
    */
   public static <T, R> RealHandleBuilder<T, R> newRealHandleBuilder(
       NodeBuilder<T, R> nodeBuilder, Consumer<Handle> consumer) {
+    checkNotNull(nodeBuilder, "nodeBuilder");
+    checkNotNull(consumer, "consumer");
     return new RealHandleBuilder<T, R>(nodeBuilder, consumer);
   }
 

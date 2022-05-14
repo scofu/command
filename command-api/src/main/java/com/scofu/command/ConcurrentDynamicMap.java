@@ -1,5 +1,7 @@
 package com.scofu.command;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -26,11 +28,13 @@ public class ConcurrentDynamicMap<K, V extends Predicate<K>> implements DynamicM
 
   @Override
   public void add(V value) {
+    checkNotNull(value, "value");
     unmapped.add(value);
   }
 
   @Override
   public Optional<V> get(K key) {
+    checkNotNull(key, "key");
     var value = values.get(key);
     if (value == null) {
       for (var unmappedValue : unmapped) {
@@ -46,6 +50,7 @@ public class ConcurrentDynamicMap<K, V extends Predicate<K>> implements DynamicM
 
   @Override
   public Optional<V> invalidate(K key) {
+    checkNotNull(key, "key");
     return Optional.ofNullable(values.remove(key));
   }
 }

@@ -1,5 +1,6 @@
 package com.scofu.command.model;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.Component.translatable;
 
@@ -30,6 +31,8 @@ public interface NodeTree {
    * @param validators the validators
    */
   default Set<Entry<Identifier<?>, Node<?, ?>>> nodes(Context context, Set<Validator> validators) {
+    checkNotNull(context, "context");
+    checkNotNull(validators, "validators");
     return nodes().entrySet().stream()
         .filter(
             entry -> {
@@ -54,6 +57,8 @@ public interface NodeTree {
    */
   default Set<Entry<Identifier<?>, Node<?, ?>>> aliasedNodes(
       Context context, Set<Validator> validators) {
+    checkNotNull(context, "context");
+    checkNotNull(validators, "validators");
     return aliasedNodes().entrySet().stream()
         .filter(
             entry -> {
@@ -75,6 +80,7 @@ public interface NodeTree {
    * @param <R> the type of the output from the node
    */
   default <T, R> void register(Node<T, R> node) {
+    checkNotNull(node, "node");
     node.identifiers().forEach(identifier -> nodes().put(identifier, node));
   }
 
@@ -91,6 +97,9 @@ public interface NodeTree {
    */
   default Result<Node<?, ?>> resolveNodeByIdentifiers(
       Context context, Set<Validator> validators, NodeIdentifierIterator identifiers) {
+    checkNotNull(context, "context");
+    checkNotNull(validators, "validators");
+    checkNotNull(identifiers, "identifiers");
     Result<Node<?, ?>> node = null;
     var parentNode = this;
     Identifier<?> parentIdentifier = null;
@@ -124,6 +133,9 @@ public interface NodeTree {
    */
   default Result<Node<?, ?>> validateDirectChildByIdentifier(
       Context context, Set<Validator> validators, boolean isRoot, Identifier<?> identifier) {
+    checkNotNull(context, "context");
+    checkNotNull(validators, "validators");
+    checkNotNull(identifier, "identifier");
     final var node = nodes().getOrDefault(identifier, aliasedNodes().get(identifier));
     if (node == null) {
       if (isRoot) {

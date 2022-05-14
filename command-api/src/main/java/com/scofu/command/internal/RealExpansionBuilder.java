@@ -1,5 +1,7 @@
 package com.scofu.command.internal;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import com.scofu.command.model.Expansion;
 import com.scofu.command.model.ExpansionBuilder;
 import java.util.Optional;
@@ -25,6 +27,8 @@ public class RealExpansionBuilder<T, R> implements ExpansionBuilder<T, R> {
    */
   public static <T, R> RealExpansionBuilder<T, R> newRealExpansionBuilder(
       Consumer<Expansion<T>> consumer, R returnValue) {
+    checkNotNull(consumer, "context");
+    checkNotNull(returnValue, "returnValue");
     return new RealExpansionBuilder<T, R>(consumer, returnValue);
   }
 

@@ -1,5 +1,6 @@
 package com.scofu.command.model;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static com.scofu.command.model.Identifier.identifier;
 
 import com.google.common.collect.Maps;
@@ -65,6 +66,7 @@ public class TransformingNodeDiscoverer {
    */
   public <T> List<? extends Node<?, ?>> exploreAndRegister(
       Class<? extends T> type, @Nullable T instance) {
+    checkNotNull(type, "type");
     return Stream.of(type.getDeclaredMethods())
         .peek(method -> method.setAccessible(true))
         .filter(
@@ -91,6 +93,8 @@ public class TransformingNodeDiscoverer {
    * @param <T> the type of the instance
    */
   public <T> Node<?, ?> fromMethod(Method method, @Nullable T instance, Identified identified) {
+    checkNotNull(method, "method");
+    checkNotNull(identified, "identified");
     final var path = identified.value().split(" ");
     final var identifier = identifier(path[path.length - 1]);
     final var fullyQualifiedIdentifier = identifier(String.join(" ", path));

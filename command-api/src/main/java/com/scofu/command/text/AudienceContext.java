@@ -1,5 +1,6 @@
 package com.scofu.command.text;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static com.scofu.text.ContextualizedComponent.error;
 import static net.kyori.adventure.text.Component.newline;
 
@@ -37,6 +38,10 @@ public class AudienceContext implements Context {
    */
   public AudienceContext(Audience audience, Locale locale,
       HelpMessageGenerator helpMessageGenerator, Theme theme) {
+    checkNotNull(audience, "audience");
+    checkNotNull(locale, "locale");
+    checkNotNull(helpMessageGenerator, "helpMessageGenerator");
+    checkNotNull(theme, "theme");
     this.audience = audience;
     this.locale = locale;
     this.helpMessageGenerator = helpMessageGenerator;

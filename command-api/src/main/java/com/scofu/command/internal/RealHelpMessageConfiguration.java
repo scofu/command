@@ -1,5 +1,7 @@
 package com.scofu.command.internal;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import com.scofu.command.text.HelpMessageConfiguration;
 import java.util.Optional;
 
@@ -19,6 +21,7 @@ public class RealHelpMessageConfiguration implements HelpMessageConfiguration {
    */
   public static RealHelpMessageConfiguration newRealHelpMessageConfiguration(
       Optional<String> commandPrefix) {
+    checkNotNull(commandPrefix, "commandPrefix");
     return new RealHelpMessageConfiguration(commandPrefix);
   }
 

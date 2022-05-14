@@ -1,5 +1,7 @@
 package com.scofu.command.internal;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import com.scofu.command.model.Expansion;
 import com.scofu.command.model.Handle;
 import com.scofu.command.model.HandleBuilder;
@@ -70,6 +72,9 @@ public class RealNodeBuilder<T, R> implements NodeBuilder<T, R> {
       NodeBuilder<?, ?> parent,
       Consumer<Node<?, ?>> consumer,
       List<? extends Identifier<?>> identifiers) {
+    checkNotNull(parent, "parent");
+    checkNotNull(consumer, "consumer");
+    checkNotNull(identifiers, "identifiers");
     return new RealNodeBuilder<T, R>(parent, consumer, identifiers);
   }
 

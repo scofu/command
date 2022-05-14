@@ -1,5 +1,6 @@
 package com.scofu.command.target;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.concurrent.CompletableFuture.supplyAsync;
 
 import com.scofu.command.model.Node;
@@ -19,6 +20,8 @@ public class FutureTarget<T, R> implements Target<T, CompletableFuture<R>> {
   private final Target<T, R> target;
 
   public FutureTarget(Executor executor, Target<T, R> target) {
+    checkNotNull(executor, "executor");
+    checkNotNull(target, "target");
     this.executor = executor;
     this.target = target;
   }
@@ -26,6 +29,7 @@ public class FutureTarget<T, R> implements Target<T, CompletableFuture<R>> {
   @SuppressWarnings("unchecked")
   @Override
   public CompletableFuture<R> invoke(Command command, T argument) throws Throwable {
+    checkNotNull(command, "command");
     return supplyAsync(() -> {
       try {
         return target.invoke(command, argument);
