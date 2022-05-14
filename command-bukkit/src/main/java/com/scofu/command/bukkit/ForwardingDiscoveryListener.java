@@ -20,8 +20,11 @@ final class ForwardingDiscoveryListener implements DiscoveryListener {
   private final ThemeRegistry themeRegistry;
 
   @Inject
-  ForwardingDiscoveryListener(Server server, Dispatcher dispatcher,
-      HelpMessageGenerator helpMessageGenerator, ThemeRegistry themeRegistry) {
+  ForwardingDiscoveryListener(
+      Server server,
+      Dispatcher dispatcher,
+      HelpMessageGenerator helpMessageGenerator,
+      ThemeRegistry themeRegistry) {
     this.server = server;
     this.dispatcher = dispatcher;
     this.helpMessageGenerator = helpMessageGenerator;
@@ -39,8 +42,10 @@ final class ForwardingDiscoveryListener implements DiscoveryListener {
       return;
     }
     System.out.println("REGISTERING FORWARDING COMMAND: " + node.identifiers());
-    server.getCommandMap()
-        .register(FALLBACK_PREFIX,
+    server
+        .getCommandMap()
+        .register(
+            FALLBACK_PREFIX,
             new ForwardingCommand(node, dispatcher, helpMessageGenerator, themeRegistry));
   }
 }

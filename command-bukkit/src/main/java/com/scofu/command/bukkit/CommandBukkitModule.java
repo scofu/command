@@ -10,9 +10,7 @@ import com.scofu.common.inject.annotation.Module;
 import com.scofu.text.BundledTranslationProvider;
 import java.util.Locale;
 
-/**
- * Command bukkit module.
- */
+/** Command bukkit module. */
 @Module
 public class CommandBukkitModule extends AbstractFeatureModule {
 
@@ -20,8 +18,9 @@ public class CommandBukkitModule extends AbstractFeatureModule {
   protected void configure() {
     bindFeature(PlayerTransformer.class).in(Scopes.SINGLETON);
     bindFeature(PlayerDescriber.class).in(Scopes.SINGLETON);
-    bindFeatureInstance(new BundledTranslationProvider(Locale.US, "command-bukkit_en_US",
-        CommandBukkitModule.class.getClassLoader()));
+    bindFeatureInstance(
+        new BundledTranslationProvider(
+            Locale.US, "command-bukkit_en_US", CommandBukkitModule.class.getClassLoader()));
 
     Multibinder.newSetBinder(binder(), DiscoveryListener.class)
         .addBinding()
