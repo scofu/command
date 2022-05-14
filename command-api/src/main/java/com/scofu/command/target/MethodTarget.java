@@ -14,6 +14,12 @@ public class MethodTarget<R> implements Target<Object[], R> {
   private final Method method;
   private final Object instance;
 
+  /**
+   * Constructs a new method target.
+   *
+   * @param method the method
+   * @param instance the instance
+   */
   public MethodTarget(Method method, Object instance) {
     checkNotNull(method, "method");
     this.method = method;

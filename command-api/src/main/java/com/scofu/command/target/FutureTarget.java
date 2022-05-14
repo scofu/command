@@ -19,6 +19,12 @@ public class FutureTarget<T, R> implements Target<T, CompletableFuture<R>> {
   private final Executor executor;
   private final Target<T, R> target;
 
+  /**
+   * Constructs a new future target.
+   *
+   * @param executor the executor
+   * @param target  the target
+   */
   public FutureTarget(Executor executor, Target<T, R> target) {
     checkNotNull(executor, "executor");
     checkNotNull(target, "target");
