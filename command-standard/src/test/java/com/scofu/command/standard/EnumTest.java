@@ -9,6 +9,7 @@ import com.scofu.app.Service;
 import com.scofu.app.bootstrap.BootstrapModule;
 import com.scofu.command.Dispatcher;
 import com.scofu.command.model.Identified;
+import com.scofu.command.text.Description;
 import java.util.List;
 import java.util.Locale;
 import org.junit.jupiter.api.Test;
@@ -38,6 +39,7 @@ public class EnumTest extends Service {
   }
 
   @Identified("favorite")
+  @Description("Returns my favorite animal!")
   String describeAnimal(Animal animal) {
     return "My favorite animal is %s.".formatted(animal.name().toLowerCase(Locale.ROOT));
   }
