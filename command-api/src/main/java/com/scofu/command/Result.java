@@ -23,11 +23,6 @@ public interface Result<T> {
   }
 
   /**
-   * Returns the error.
-   */
-  Throwable error();
-
-  /**
    * Creates and returns a new error result with a value.
    *
    * @param throwable the throwable
@@ -68,6 +63,11 @@ public interface Result<T> {
   }
 
   /**
+   * Returns the error.
+   */
+  Throwable theError();
+
+  /**
    * Returns whether this result has a value or not.
    */
   boolean hasValue();
@@ -96,7 +96,7 @@ public interface Result<T> {
    */
   default Result<T> onError(Consumer<Throwable> consumer) {
     if (hasError()) {
-      consumer.accept(error());
+      consumer.accept(theError());
     }
     return this;
   }
@@ -151,7 +151,7 @@ public interface Result<T> {
     }
 
     @Override
-    public Throwable error() {
+    public Throwable theError() {
       return throwable;
     }
 
@@ -198,7 +198,7 @@ public interface Result<T> {
 
     @Override
     public <R> Result<R> map(Function<T, R> function) {
-      return new ErrorValue<>(error(), function.apply(value));
+      return new ErrorValue<>(theError(), function.apply(value));
     }
 
     @Override
@@ -207,7 +207,7 @@ public interface Result<T> {
       if (result instanceof Error<R> error) {
         return error;
       }
-      return new ErrorValue<>(error(), result.get());
+      return new ErrorValue<>(theError(), result.get());
     }
   }
 
@@ -245,7 +245,7 @@ public interface Result<T> {
     }
 
     @Override
-    public Throwable error() {
+    public Throwable theError() {
       return null;
     }
 
@@ -298,7 +298,7 @@ public interface Result<T> {
     }
 
     @Override
-    public Throwable error() {
+    public Throwable theError() {
       return null;
     }
 

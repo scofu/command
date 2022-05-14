@@ -21,17 +21,15 @@ public interface NodeBuilder<T, R> extends Expandable<NodeBuilder<T, R>> {
    */
   NodeBuilder<T, R> withHandle(Handle handle);
 
-  /**
-   * Sets the handle.
-   */
+  /** Sets the handle. */
   HandleBuilder<T, R> withHandle();
 
   /**
    * Sets the target.
    *
    * @param target the target
-   * @param <K>    the type of the input
-   * @param <V>    the type of the output
+   * @param <K> the type of the input
+   * @param <V> the type of the output
    */
   <K, V> NodeBuilder<K, V> withTarget(Target<K, V> target);
 
@@ -46,21 +44,17 @@ public interface NodeBuilder<T, R> extends Expandable<NodeBuilder<T, R>> {
    * Adds a child.
    *
    * @param identifier the identifier
-   * @param aliases    the aliases
-   * @param <K>        the type of the input
-   * @param <V>        the type of the output
-   * @param <U>        the type of the child's identifier
+   * @param aliases the aliases
+   * @param <K> the type of the input
+   * @param <V> the type of the output
+   * @param <U> the type of the child's identifier
    */
   @SuppressWarnings("unchecked")
   <K, V, U> NodeBuilder<K, V> withChild(Identifier<U> identifier, Identifier<U>... aliases);
 
-  /**
-   * Sets the child.
-   */
+  /** Sets the child. */
   NodeBuilder<?, ?> endChild();
 
-  /**
-   * Builds and returns a new node.
-   */
+  /** Builds and returns a new node. */
   Node<T, R> build();
 }

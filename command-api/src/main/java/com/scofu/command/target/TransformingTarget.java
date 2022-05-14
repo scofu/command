@@ -11,9 +11,7 @@ import com.scofu.command.internal.RealParameters;
 import com.scofu.command.model.Parameter;
 import java.util.List;
 
-/**
- * A target that automatically transforms strings to objects using transformers.
- */
+/** A target that automatically transforms strings to objects using transformers. */
 public class TransformingTarget implements Target<List<String>, Object[]> {
 
   private final TransformerMap transformerMap;
@@ -26,29 +24,37 @@ public class TransformingTarget implements Target<List<String>, Object[]> {
   @SuppressWarnings("unchecked")
   @Override
   public Object[] invoke(Command command, List<String> argument) throws Throwable {
-    final var arguments = RealArguments.newRealArguments(
-        (argument == null ? List.<String>of() : argument).iterator());
-    final var parameters = RealParameters.newRealParameters(
-        command.node().handle().parameters().iterator());
+    final var arguments =
+        RealArguments.newRealArguments(
+            (argument == null ? List.<String>of() : argument).iterator());
+    final var parameters =
+        RealParameters.newRealParameters(command.node().handle().parameters().iterator());
     final var objects = new Object[command.node().handle().parameters().size()];
     var index = 0;
     while (parameters.hasNext()) {
       final var parameter = parameters.next();
-      final var transformer = transformerMap.get(parameter.type())
-          .orElseThrow(() -> new ParameterException(
-              translatable("transformer.parameter.missing_transformer",
-                  text(parameter.type().toString())), parameter));
-      final var result = transformer.transform(command, (Parameter) parameter, parameters,
-          arguments);
+      final var transformer =
+          transformerMap
+              .get(parameter.type())
+              .orElseThrow(
+                  () ->
+                      new ParameterException(
+                          translatable(
+                              "transformer.parameter.missing_transformer",
+                              text(parameter.type().toString())),
+                          parameter));
+      final var result =
+          transformer.transform(command, (Parameter) parameter, parameters, arguments);
       if (result.hasError()) {
         throw new ParameterException(
             translatable("transformer.parameter.error", text(parameter.type().toString())),
-            result.error(), parameter);
+            result.theError(),
+            parameter);
       }
       final var object = result.get();
       if (object == null) {
-        throw new ParameterArgumentException(translatable("transformer.parameter.missing_argument"),
-            parameter);
+        throw new ParameterArgumentException(
+            translatable("transformer.parameter.missing_argument"), parameter);
       }
       objects[index++] = object;
     }

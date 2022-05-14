@@ -8,9 +8,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-/**
- * Nodes discovered annotated with this will automatically have a permission attached.
- */
+/** Nodes discovered annotated with this will automatically have a permission attached. */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Permission {
@@ -18,8 +16,6 @@ public @interface Permission {
   Identifier<PermissionHolder> HOLDER_IDENTIFIER = identifier("permission_holder");
   Identifier<String> PERMISSION_IDENTIFIER = identifier("permission");
 
-  /**
-   * Returns the permission.
-   */
+  /** Returns the permission. */
   String value();
 }

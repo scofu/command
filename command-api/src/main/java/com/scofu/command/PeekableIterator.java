@@ -21,7 +21,7 @@ public class PeekableIterator<T> implements Iterator<T> {
    * Wraps and returns the given iterator in a new peekable iterator.
    *
    * @param iterator the iterator
-   * @param <T>      the type of the elements
+   * @param <T> the type of the elements
    */
   public static <T> PeekableIterator<T> wrap(Iterator<T> iterator) {
     return new PeekableIterator<>(iterator);
@@ -42,11 +42,10 @@ public class PeekableIterator<T> implements Iterator<T> {
     return iterator.next();
   }
 
-  /**
-   * Peeks at the next value.
-   */
+  /** Peeks at the next value. */
   public Optional<T> peek() {
-    return peek != null ? Optional.of(peek)
+    return peek != null
+        ? Optional.of(peek)
         : hasNext() ? Optional.of(peek = iterator.next()) : Optional.empty();
   }
 }

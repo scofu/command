@@ -4,9 +4,7 @@ import com.scofu.command.Parameters;
 import com.scofu.command.model.Parameter;
 import java.util.Iterator;
 
-/**
- * Real parameters.
- */
+/** Real parameters. */
 public class RealParameters implements Parameters {
 
   private final Iterator<Parameter<?>> iterator;

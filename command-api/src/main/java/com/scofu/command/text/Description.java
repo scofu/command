@@ -8,22 +8,16 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-/**
- * Nodes discovered annotated with this will automatically have a description attached.
- */
+/** Nodes discovered annotated with this will automatically have a description attached. */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Description {
 
   Identifier<String> DESCRIPTION_IDENTIFIER = identifier("description");
 
-  /**
-   * Returns the translation key or raw description.
-   */
+  /** Returns the translation key or raw description. */
   String value();
 
-  /**
-   * Returns whether this description is a translation key or not.
-   */
+  /** Returns whether this description is a translation key or not. */
   boolean notTranslated() default false;
 }

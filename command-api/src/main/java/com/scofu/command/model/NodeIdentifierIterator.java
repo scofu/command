@@ -5,9 +5,7 @@ import static com.scofu.command.model.Identifier.identifier;
 import com.scofu.command.PeekableIterator;
 import java.util.function.Consumer;
 
-/**
- * Iterates over node identifiers with information about the parent.
- */
+/** Iterates over node identifiers with information about the parent. */
 public interface NodeIdentifierIterator {
 
   /**
@@ -34,10 +32,10 @@ public interface NodeIdentifierIterator {
    * Creates and returns a new dynamic node identifier iterator.
    *
    * @param identifiersOrArguments the identifiers or arguments
-   * @param consumer               the consumer
+   * @param consumer the consumer
    */
-  static <T> NodeIdentifierIterator dynamic(PeekableIterator<T> identifiersOrArguments,
-      Consumer<? super Identifier<?>> consumer) {
+  static <T> NodeIdentifierIterator dynamic(
+      PeekableIterator<T> identifiersOrArguments, Consumer<? super Identifier<?>> consumer) {
     return new NodeIdentifierIterator() {
       @Override
       public boolean hasNext(NodeTree parent, Identifier<?> parentIdentifier) {
@@ -63,7 +61,7 @@ public interface NodeIdentifierIterator {
   /**
    * Returns whether another node identifier is present or not.
    *
-   * @param parent           the parent
+   * @param parent the parent
    * @param parentIdentifier the parent identifier
    */
   boolean hasNext(NodeTree parent, Identifier<?> parentIdentifier);
@@ -71,9 +69,8 @@ public interface NodeIdentifierIterator {
   /**
    * Returns the next node identifier.
    *
-   * @param parent           the parent
+   * @param parent the parent
    * @param parentIdentifier the parent identifier
    */
   Identifier<?> next(NodeTree parent, Identifier<?> parentIdentifier);
-
 }

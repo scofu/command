@@ -24,7 +24,7 @@ public interface Expansion<T> {
    * Creates and returns a new expansion with the given value.
    *
    * @param value the value
-   * @param <T>   the type of the value
+   * @param <T> the type of the value
    */
   static <T> Expansion<T> value(T value) {
     return new Value<>(Optional.of(value));
@@ -34,7 +34,7 @@ public interface Expansion<T> {
    * Creates and returns a new optional expansion with the given optonal value.
    *
    * @param value the value
-   * @param <T>   the type of the value
+   * @param <T> the type of the value
    */
   static <T> Expansion<T> optional(Optional<T> value) {
     return new Value<>(value);
@@ -44,27 +44,21 @@ public interface Expansion<T> {
    * Creates and returns a new lazy expansion with the given supplier.
    *
    * @param supplier the vsupplieralue
-   * @param <T>      the type of the value
+   * @param <T> the type of the value
    */
   static <T> Expansion<T> lazy(Supplier<T> supplier) {
     return new Lazy<>(supplier);
   }
 
-  /**
-   * Returns the optional value.
-   */
+  /** Returns the optional value. */
   Optional<T> get();
 
-  /**
-   * See {@link Optional#orElseThrow()}.
-   */
+  /** See {@link Optional#orElseThrow()}. */
   default T orElseThrow() {
     return get().orElseThrow();
   }
 
-  /**
-   * Empty expansion.
-   */
+  /** Empty expansion. */
   class Empty implements Expansion {
 
     private static final Empty EMPTY = new Empty();
@@ -73,7 +67,6 @@ public interface Expansion<T> {
     public Optional get() {
       return Optional.empty();
     }
-
   }
 
   /**
@@ -113,5 +106,4 @@ public interface Expansion<T> {
       return Optional.of(supplier.get());
     }
   }
-
 }

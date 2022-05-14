@@ -11,9 +11,7 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-/**
- * Real parameter builder.
- */
+/** Real parameter builder. */
 public class RealParameterBuilder<T, R> implements ParameterBuilder<T, R> {
 
   private final HandleBuilder<T, R> handleBuilder;
@@ -31,7 +29,7 @@ public class RealParameterBuilder<T, R> implements ParameterBuilder<T, R> {
    * Creates and returns a new real parameter builder.
    *
    * @param handleBuilder the handle builder
-   * @param consumer      the consumer
+   * @param consumer the consumer
    */
   public static <T, R> RealParameterBuilder<T, R> newRealParameterBuilder(
       HandleBuilder<T, R> handleBuilder, Consumer<Parameter<?>> consumer) {
@@ -55,17 +53,21 @@ public class RealParameterBuilder<T, R> implements ParameterBuilder<T, R> {
     if (annotations == null) {
       annotations = List.of(annotation);
     } else {
-      annotations = Stream.of(annotations, List.of(annotation))
-          .flatMap(Collection::stream)
-          .collect(Collectors.toList());
+      annotations =
+          Stream.of(annotations, List.of(annotation))
+              .flatMap(Collection::stream)
+              .collect(Collectors.toList());
     }
     return this;
   }
 
   @Override
   public HandleBuilder<T, R> endParameter() {
-    consumer.accept(new Parameter<>(name, type,
-        new ListBasedAnnotatedElement(annotations == null ? List.of() : annotations)));
+    consumer.accept(
+        new Parameter<>(
+            name,
+            type,
+            new ListBasedAnnotatedElement(annotations == null ? List.of() : annotations)));
     return handleBuilder;
   }
 }

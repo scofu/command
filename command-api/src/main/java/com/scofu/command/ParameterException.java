@@ -3,9 +3,7 @@ package com.scofu.command;
 import com.scofu.command.model.Parameter;
 import net.kyori.adventure.text.Component;
 
-/**
- * Parameter related exception.
- */
+/** Parameter related exception. */
 public class ParameterException extends DispatchException {
 
   private final Parameter<?> parameter;
@@ -20,10 +18,7 @@ public class ParameterException extends DispatchException {
     this.parameter = parameter;
   }
 
-
-  /**
-   * Returns the parameter.
-   */
+  /** Returns the parameter. */
   public Parameter<?> parameter() {
     return parameter;
   }

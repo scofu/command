@@ -2,9 +2,7 @@ package com.scofu.command;
 
 import net.kyori.adventure.text.Component;
 
-/**
- * Dispatch exception.
- */
+/** Dispatch exception. */
 public class DispatchException extends RuntimeException {
 
   private final Component message;
@@ -18,9 +16,7 @@ public class DispatchException extends RuntimeException {
     this.message = message;
   }
 
-  /**
-   * Returns the message.
-   */
+  /** Returns the message. */
   public Component message() {
     return message;
   }

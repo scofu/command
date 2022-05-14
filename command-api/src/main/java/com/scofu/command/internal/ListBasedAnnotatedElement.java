@@ -7,16 +7,20 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-/**
- * A list based annotated element.
- */
+/** A list based annotated element. */
 public class ListBasedAnnotatedElement implements AnnotatedElement {
 
   private final Map<Class<?>, Annotation> annotations;
 
+  /**
+   * Constructs a new list based annotated element.
+   *
+   * @param annotations the annotations
+   */
   public ListBasedAnnotatedElement(List<Annotation> annotations) {
-    this.annotations = annotations.stream()
-        .collect(Collectors.toMap(Annotation::annotationType, Function.identity()));
+    this.annotations =
+        annotations.stream()
+            .collect(Collectors.toMap(Annotation::annotationType, Function.identity()));
   }
 
   @SuppressWarnings("unchecked")
@@ -31,7 +35,7 @@ public class ListBasedAnnotatedElement implements AnnotatedElement {
 
   @Override
   public Annotation[] getAnnotations() {
-    return annotations.values().toArray(new Annotation[]{});
+    return annotations.values().toArray(new Annotation[] {});
   }
 
   @Override

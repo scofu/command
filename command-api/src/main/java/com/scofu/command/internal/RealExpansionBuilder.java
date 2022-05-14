@@ -6,9 +6,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-/**
- * Real expansion builder.
- */
+/** Real expansion builder. */
 public class RealExpansionBuilder<T, R> implements ExpansionBuilder<T, R> {
 
   private final Consumer<Expansion<T>> consumer;
@@ -22,7 +20,7 @@ public class RealExpansionBuilder<T, R> implements ExpansionBuilder<T, R> {
   /**
    * Creates and returns a new real expansion builder.
    *
-   * @param consumer    the consumer
+   * @param consumer the consumer
    * @param returnValue the return value
    */
   public static <T, R> RealExpansionBuilder<T, R> newRealExpansionBuilder(

@@ -25,9 +25,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
-/**
- * Discovers and registers transforming nodes.
- */
+/** Discovers and registers transforming nodes. */
 public class TransformingNodeDiscoverer {
 
   private final DiscoveryConfiguration discoveryConfiguration;
@@ -39,16 +37,18 @@ public class TransformingNodeDiscoverer {
   private final Set<DiscoveryListener> discoveryListeners;
 
   @Inject
-  TransformingNodeDiscoverer(DiscoveryConfiguration discoveryConfiguration, Dispatcher dispatcher,
-      TransformingTarget transformingTarget, TransformingSuggester transformingSuggester,
+  TransformingNodeDiscoverer(
+      DiscoveryConfiguration discoveryConfiguration,
+      Dispatcher dispatcher,
+      TransformingTarget transformingTarget,
+      TransformingSuggester transformingSuggester,
       Set<DiscoveryListener> discoveryListeners) {
     this.discoveryConfiguration = discoveryConfiguration;
     this.dispatcher = dispatcher;
     this.transformingTarget = transformingTarget;
     this.transformingSuggester = transformingSuggester;
-    this.discoveryListeners = discoveryListeners.stream()
-        .sorted()
-        .collect(Collectors.toCollection(LinkedHashSet::new));
+    this.discoveryListeners =
+        discoveryListeners.stream().sorted().collect(Collectors.toCollection(LinkedHashSet::new));
     this.waitingForParents = new ConcurrentHashMap<>();
     this.cache = Maps.newConcurrentMap();
 
@@ -57,26 +57,27 @@ public class TransformingNodeDiscoverer {
 
   /**
    * Iterates over all methods declared in the given class and registers nodes from methods
-   * annotated with {@link  Identified}.
+   * annotated with {@link Identified}.
    *
-   * @param type     the type
+   * @param type the type
    * @param instance the instance
-   * @param <T>      the type of the instance
+   * @param <T> the type of the instance
    */
-  public <T> List<? extends Node<?, ?>> exploreAndRegister(Class<? extends T> type,
-      @Nullable T instance) {
+  public <T> List<? extends Node<?, ?>> exploreAndRegister(
+      Class<? extends T> type, @Nullable T instance) {
     return Stream.of(type.getDeclaredMethods())
         .peek(method -> method.setAccessible(true))
-        .filter(((Predicate<Method>) method -> method.isAnnotationPresent(Identified.class)).or(
-            method -> method.isAnnotationPresent(MultiIdentified.class)))
-        .flatMap(method -> Stream.of(method.getAnnotationsByType(Identified.class))
-            .map(discoverable -> fromMethod(method, instance, discoverable)))
+        .filter(
+            ((Predicate<Method>) method -> method.isAnnotationPresent(Identified.class))
+                .or(method -> method.isAnnotationPresent(MultiIdentified.class)))
+        .flatMap(
+            method ->
+                Stream.of(method.getAnnotationsByType(Identified.class))
+                    .map(discoverable -> fromMethod(method, instance, discoverable)))
         .toList();
   }
 
-  /**
-   * Clears the cache.
-   */
+  /** Clears the cache. */
   public void clearCache() {
     cache.clear();
   }
@@ -84,18 +85,17 @@ public class TransformingNodeDiscoverer {
   /**
    * Creates and returns a transforming node from the given method.
    *
-   * @param method     the method
-   * @param instance   the instance
+   * @param method the method
+   * @param instance the instance
    * @param identified the discoverable
-   * @param <T>        the type of the instance
+   * @param <T> the type of the instance
    */
   public <T> Node<?, ?> fromMethod(Method method, @Nullable T instance, Identified identified) {
     final var path = identified.value().split(" ");
     final var identifier = identifier(path[path.length - 1]);
     final var fullyQualifiedIdentifier = identifier(String.join(" ", path));
-    final var aliases = Stream.of(identified.aliases())
-        .map(Identifier::identifier)
-        .toArray(Identifier<?>[]::new);
+    final var aliases =
+        Stream.of(identified.aliases()).map(Identifier::identifier).toArray(Identifier<?>[]::new);
     final var node = convertToNode(method, instance, identified, identifier, aliases);
 
     cache.put(fullyQualifiedIdentifier, node);
@@ -112,8 +112,8 @@ public class TransformingNodeDiscoverer {
       return node;
     }
 
-    final var parentIdentifier = identifier(
-        Stream.of(path).limit(path.length - 1).collect(Collectors.joining(" ")));
+    final var parentIdentifier =
+        identifier(Stream.of(path).limit(path.length - 1).collect(Collectors.joining(" ")));
     final var parentNode = cache.get(parentIdentifier);
 
     if (parentNode != null) {
@@ -127,38 +127,46 @@ public class TransformingNodeDiscoverer {
         consumers = new CopyOnWriteArraySet<>();
         waitingForParents.put(parentIdentifier, consumers);
       }
-      consumers.add(realParentNode -> {
-        realParentNode.nodes().put(identifier, node);
-        for (var alias : aliases) {
-          realParentNode.aliasedNodes().put(alias, node);
-        }
-      });
+      consumers.add(
+          realParentNode -> {
+            realParentNode.nodes().put(identifier, node);
+            for (var alias : aliases) {
+              realParentNode.aliasedNodes().put(alias, node);
+            }
+          });
     }
     return node;
   }
 
-  private <T> Node<?, ?> convertToNode(Method method, T instance, Identified identified,
-      Identifier<Object> identifier, Identifier<?>[] aliases) {
+  private <T> Node<?, ?> convertToNode(
+      Method method,
+      T instance,
+      Identified identified,
+      Identifier<Object> identifier,
+      Identifier<?>[] aliases) {
     final Node<?, ?> node;
     if (identified.futile()) {
       node = Node.builder(identifier, aliases).map(Identified.METHOD_IDENTIFIER).to(method).build();
     } else {
       Target<List<String>, ?> target;
       if (identified.async()) {
-        target = new FutureTarget<>(discoveryConfiguration.executorService(),
-            transformingTarget.then(new MethodTarget<>(method, instance)));
+        target =
+            new FutureTarget<>(
+                discoveryConfiguration.executorService(),
+                transformingTarget.then(new MethodTarget<>(method, instance)));
       } else {
         target = transformingTarget.then(new MethodTarget<>(method, instance));
       }
-      node = Node.builder(identifier, aliases)
-          .withHandle()
-          .withParameters(parseParameters(method))
-          .endHandle()
-          .map(Identified.METHOD_IDENTIFIER)
-          .to(method)
-          .withTarget(target)
-          .withSuggester(transformingSuggester)
-          .build();
+      node =
+          Node.builder(identifier, aliases)
+              .withHandle()
+              .withParameters(parseParameters(method))
+              .endHandle()
+              .map(Identified.METHOD_IDENTIFIER)
+              .to(method)
+              .withTarget(target)
+              .withSuggester(transformingSuggester)
+              .build();
     }
     return node;
   }
@@ -168,10 +176,10 @@ public class TransformingNodeDiscoverer {
   }
 
   private Parameter<Object> convert(java.lang.reflect.Parameter parameter) {
-    final var nameOrTranslation = Optional.ofNullable(parameter.getAnnotation(Translation.class))
-        .map(Translation::value)
-        .orElse(parameter.getName());
+    final var nameOrTranslation =
+        Optional.ofNullable(parameter.getAnnotation(Translation.class))
+            .map(Translation::value)
+            .orElse(parameter.getName());
     return new Parameter<>(nameOrTranslation, parameter.getParameterizedType(), parameter);
   }
-
 }

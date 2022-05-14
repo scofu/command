@@ -25,9 +25,7 @@ public interface ExpansionBuilder<T, R> {
    */
   R toOptional(Optional<T> value);
 
-  /**
-   * Binds the expansion to nothing.
-   */
+  /** Binds the expansion to nothing. */
   R toNothing();
 
   /**

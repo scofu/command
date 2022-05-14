@@ -13,9 +13,7 @@ import com.scofu.command.model.Node;
  */
 public interface Validator {
 
-  /**
-   * Returns an empty validator that doesn't validate at all.
-   */
+  /** Returns an empty validator that doesn't validate at all. */
   static Validator empty() {
     return Empty.EMPTY;
   }
@@ -24,15 +22,13 @@ public interface Validator {
    * Validates the given context for the given node.
    *
    * @param context the context
-   * @param node    the node
-   * @param <T>     the type of the input
-   * @param <R>     the type of the output
+   * @param node the node
+   * @param <T> the type of the input
+   * @param <R> the type of the output
    */
   <T, R> boolean validate(Context context, Node<T, R> node);
 
-  /**
-   * Empty validator.
-   */
+  /** Empty validator. */
   class Empty implements Validator {
 
     private static final Empty EMPTY = new Empty();

@@ -5,15 +5,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-/**
- * Translates parameters.
- */
+/** Translates parameters. */
 @Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Translation {
 
-  /**
-   * Returns the translation key.
-   */
+  /** Returns the translation key. */
   String value();
 }

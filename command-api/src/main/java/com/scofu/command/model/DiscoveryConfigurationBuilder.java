@@ -3,9 +3,7 @@ package com.scofu.command.model;
 import com.scofu.command.internal.RealDiscoveryConfiguration;
 import java.util.concurrent.ExecutorService;
 
-/**
- * Configuration builder for {@link DiscoveryConfiguration}.
- */
+/** Configuration builder for {@link DiscoveryConfiguration}. */
 public class DiscoveryConfigurationBuilder {
 
   private ExecutorService executorService;
@@ -20,11 +18,8 @@ public class DiscoveryConfigurationBuilder {
     return this;
   }
 
-  /**
-   * Builds and returns a new discovery configuration.
-   */
+  /** Builds and returns a new discovery configuration. */
   public DiscoveryConfiguration build() {
     return RealDiscoveryConfiguration.newRealDiscoveryConfiguration(executorService);
   }
-
 }

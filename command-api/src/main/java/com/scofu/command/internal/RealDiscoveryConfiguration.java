@@ -3,9 +3,7 @@ package com.scofu.command.internal;
 import com.scofu.command.model.DiscoveryConfiguration;
 import java.util.concurrent.ExecutorService;
 
-/**
- * Real discovery configuration.
- */
+/** Real discovery configuration. */
 public class RealDiscoveryConfiguration implements DiscoveryConfiguration {
 
   private final ExecutorService executorService;
@@ -28,5 +26,4 @@ public class RealDiscoveryConfiguration implements DiscoveryConfiguration {
   public ExecutorService executorService() {
     return executorService;
   }
-
 }

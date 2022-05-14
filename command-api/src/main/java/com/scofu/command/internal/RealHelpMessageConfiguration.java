@@ -3,9 +3,7 @@ package com.scofu.command.internal;
 import com.scofu.command.text.HelpMessageConfiguration;
 import java.util.Optional;
 
-/**
- * Real help message configuration.
- */
+/** Real help message configuration. */
 public class RealHelpMessageConfiguration implements HelpMessageConfiguration {
 
   private final Optional<String> commandPrefix;
@@ -28,5 +26,4 @@ public class RealHelpMessageConfiguration implements HelpMessageConfiguration {
   public Optional<String> commandPrefix() {
     return commandPrefix;
   }
-
 }

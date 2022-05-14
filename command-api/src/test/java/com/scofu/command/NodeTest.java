@@ -49,7 +49,7 @@ public class NodeTest {
     final var childResult = test.validateDirectChildByIdentifier(context,
         Set.of(new PermissionValidator()), true, identifier("child"));
     assertTrue(childResult.hasError());
-    assertTrue(childResult.error() instanceof DispatchHandleUnvalidatedException);
+    assertTrue(childResult.theError() instanceof DispatchHandleUnvalidatedException);
   }
 
   @Test

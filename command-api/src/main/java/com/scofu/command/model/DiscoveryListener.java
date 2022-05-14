@@ -3,14 +3,10 @@ package com.scofu.command.model;
 import java.util.List;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Listens for nodes discovered in {@link TransformingNodeDiscoverer}.
- */
+/** Listens for nodes discovered in {@link TransformingNodeDiscoverer}. */
 public interface DiscoveryListener extends Comparable<DiscoveryListener> {
 
-  /**
-   * Returns a list of dependencies which should be called before this.
-   */
+  /** Returns a list of dependencies which should be called before this. */
   default List<Class<? extends DiscoveryListener>> dependencies() {
     return List.of();
   }
@@ -20,8 +16,8 @@ public interface DiscoveryListener extends Comparable<DiscoveryListener> {
    *
    * @param node the node
    * @param root whether it is a root node or not
-   * @param <T>  the type of the input
-   * @param <R>  the type of the output
+   * @param <T> the type of the input
+   * @param <R> the type of the output
    */
   <T, R> void onDiscovery(Node<T, R> node, boolean root);
 
@@ -34,5 +30,4 @@ public interface DiscoveryListener extends Comparable<DiscoveryListener> {
     }
     return 0;
   }
-
 }

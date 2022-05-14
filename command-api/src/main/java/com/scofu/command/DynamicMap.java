@@ -31,5 +31,4 @@ public interface DynamicMap<K, V extends Predicate<K>> {
    * @param key the key
    */
   Optional<V> invalidate(K key);
-
 }

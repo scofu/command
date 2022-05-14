@@ -4,9 +4,7 @@ import com.scofu.command.model.DiscoveryListener;
 import com.scofu.command.model.Identified;
 import com.scofu.command.model.Node;
 
-/**
- * Attaches permissions to discovered nodes annotated with {@link Permission}.
- */
+/** Attaches permissions to discovered nodes annotated with {@link Permission}. */
 public class PermissionDiscoveryListener implements DiscoveryListener {
 
   @Override

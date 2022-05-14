@@ -4,9 +4,7 @@ import com.google.inject.Scopes;
 import com.scofu.command.Dispatcher;
 import com.scofu.common.inject.AbstractFeatureModule;
 
-/**
- * Binds internal implementations.
- */
+/** Binds internal implementations. */
 public class InternalCommandModule extends AbstractFeatureModule {
 
   @Override

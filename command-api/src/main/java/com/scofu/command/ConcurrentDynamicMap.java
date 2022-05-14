@@ -18,9 +18,7 @@ public class ConcurrentDynamicMap<K, V extends Predicate<K>> implements DynamicM
   private final Set<V> unmapped;
   private final Map<K, V> values;
 
-  /**
-   * Constructs a new concurrent dynamic map.
-   */
+  /** Constructs a new concurrent dynamic map. */
   public ConcurrentDynamicMap() {
     this.unmapped = new CopyOnWriteArraySet<>();
     this.values = new ConcurrentHashMap<>();

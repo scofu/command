@@ -3,9 +3,7 @@ package com.scofu.command;
 import com.scofu.command.model.Parameter;
 import net.kyori.adventure.text.Component;
 
-/**
- * Parameter argument exception.
- */
+/** Parameter argument exception. */
 public class ParameterArgumentException extends ParameterException {
 
   public ParameterArgumentException(Component message, Parameter<?> parameter) {

@@ -27,9 +27,7 @@ import com.scofu.common.inject.annotation.Module;
 import com.scofu.text.BundledTranslationProvider;
 import java.util.Locale;
 
-/**
- * Binds command interfaces.
- */
+/** Binds command interfaces. */
 @Module
 public class CommandModule extends AbstractFeatureModule {
 
@@ -49,12 +47,14 @@ public class CommandModule extends AbstractFeatureModule {
     bindFeatureManager(DiscoveryManager.class).in(Scopes.SINGLETON);
     bindFeatureManager(TransformerManager.class).in(Scopes.SINGLETON);
     bindFeatureManager(DescriberManager.class).in(Scopes.SINGLETON);
-    bindFeatureInstance(new BundledTranslationProvider(Locale.US, "command_en_US",
-        CommandModule.class.getClassLoader()));
+    bindFeatureInstance(
+        new BundledTranslationProvider(
+            Locale.US, "command_en_US", CommandModule.class.getClassLoader()));
 
     final var discoveryListenerBinder = Multibinder.newSetBinder(binder(), DiscoveryListener.class);
     discoveryListenerBinder.addBinding().to(PermissionDiscoveryListener.class).in(Scopes.SINGLETON);
-    discoveryListenerBinder.addBinding()
+    discoveryListenerBinder
+        .addBinding()
         .to(DescriptionDiscoveryListener.class)
         .in(Scopes.SINGLETON);
 

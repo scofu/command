@@ -12,9 +12,8 @@ public interface Suggester<T> {
   /**
    * Returns a list of suggestions.
    *
-   * @param command  the command
+   * @param command the command
    * @param argument the argument
    */
   Stream<String> suggest(Command command, T argument);
-
 }

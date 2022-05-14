@@ -20,57 +20,59 @@ import java.util.stream.Collectors;
  */
 public interface NodeTree {
 
-  /**
-   * Returns a map of nodes.
-   */
+  /** Returns a map of nodes. */
   Map<Identifier<?>, Node<?, ?>> nodes();
 
   /**
    * Returns an entry set of validated nodes.
    *
-   * @param context    the context
+   * @param context the context
    * @param validators the validators
    */
   default Set<Entry<Identifier<?>, Node<?, ?>>> nodes(Context context, Set<Validator> validators) {
-    return nodes().entrySet().stream().filter(entry -> {
-      for (var validator : validators) {
-        if (!validator.validate(context, entry.getValue())) {
-          return false;
-        }
-      }
-      return true;
-    }).collect(Collectors.toSet());
+    return nodes().entrySet().stream()
+        .filter(
+            entry -> {
+              for (var validator : validators) {
+                if (!validator.validate(context, entry.getValue())) {
+                  return false;
+                }
+              }
+              return true;
+            })
+        .collect(Collectors.toSet());
   }
 
-  /**
-   * Returns a map of aliased nodes.
-   */
+  /** Returns a map of aliased nodes. */
   Map<Identifier<?>, Node<?, ?>> aliasedNodes();
 
   /**
    * Returns an entry set of validated aliased nodes.
    *
-   * @param context    the context
+   * @param context the context
    * @param validators the validators
    */
-  default Set<Entry<Identifier<?>, Node<?, ?>>> aliasedNodes(Context context,
-      Set<Validator> validators) {
-    return aliasedNodes().entrySet().stream().filter(entry -> {
-      for (var validator : validators) {
-        if (!validator.validate(context, entry.getValue())) {
-          return false;
-        }
-      }
-      return true;
-    }).collect(Collectors.toSet());
+  default Set<Entry<Identifier<?>, Node<?, ?>>> aliasedNodes(
+      Context context, Set<Validator> validators) {
+    return aliasedNodes().entrySet().stream()
+        .filter(
+            entry -> {
+              for (var validator : validators) {
+                if (!validator.validate(context, entry.getValue())) {
+                  return false;
+                }
+              }
+              return true;
+            })
+        .collect(Collectors.toSet());
   }
 
   /**
    * Registers the given node in this tree.
    *
    * @param node the node
-   * @param <T>  the type of the input to the node
-   * @param <R>  the type of the output from the node
+   * @param <T> the type of the input to the node
+   * @param <R> the type of the output from the node
    */
   default <T, R> void register(Node<T, R> node) {
     node.identifiers().forEach(identifier -> nodes().put(identifier, node));
@@ -83,12 +85,12 @@ public interface NodeTree {
    * the child's, and continued if they match. If they don't, and the node has a target (non-futile)
    * it will be returned, otherwise continued until no more identifier is left.
    *
-   * @param context     the context
-   * @param validators  the validators
+   * @param context the context
+   * @param validators the validators
    * @param identifiers the identifiers
    */
-  default Result<Node<?, ?>> resolveNodeByIdentifiers(Context context, Set<Validator> validators,
-      NodeIdentifierIterator identifiers) {
+  default Result<Node<?, ?>> resolveNodeByIdentifiers(
+      Context context, Set<Validator> validators, NodeIdentifierIterator identifiers) {
     Result<Node<?, ?>> node = null;
     var parentNode = this;
     Identifier<?> parentIdentifier = null;
@@ -101,42 +103,45 @@ public interface NodeTree {
         parentIdentifier = identifier;
         continue;
       }
-      node = node.flatMap(
-          x -> x.validateDirectChildByIdentifier(context, validators, isRoot, identifier));
+      node =
+          node.flatMap(
+              x -> x.validateDirectChildByIdentifier(context, validators, isRoot, identifier));
       parentNode = node.hasError() ? null : node.get();
       parentIdentifier = identifier;
     }
-    return node == null ? Result.error(new DispatchException(translatable("node.resolve.no_match")))
+    return node == null
+        ? Result.error(new DispatchException(translatable("node.resolve.no_match")))
         : node;
   }
 
   /**
    * Validates a direct child by the given identifier.
    *
-   * @param context    the context
+   * @param context the context
    * @param validators the validators
-   * @param isRoot     whether this child is a root
+   * @param isRoot whether this child is a root
    * @param identifier the identifier
    */
-  default Result<Node<?, ?>> validateDirectChildByIdentifier(Context context,
-      Set<Validator> validators, boolean isRoot, Identifier<?> identifier) {
+  default Result<Node<?, ?>> validateDirectChildByIdentifier(
+      Context context, Set<Validator> validators, boolean isRoot, Identifier<?> identifier) {
     final var node = nodes().getOrDefault(identifier, aliasedNodes().get(identifier));
     if (node == null) {
       if (isRoot) {
-        return Result.error(new DispatchException(
-            translatable("node.resolve.validate.unknown_root", text(identifier.toPath()))));
+        return Result.error(
+            new DispatchException(
+                translatable("node.resolve.validate.unknown_root", text(identifier.toPath()))));
       }
-      return Result.error(new DispatchException(
-          translatable("node.resolve.validate.unknown_child", text(identifier.toPath()))));
+      return Result.error(
+          new DispatchException(
+              translatable("node.resolve.validate.unknown_child", text(identifier.toPath()))));
     }
     for (var validator : validators) {
       if (!validator.validate(context, node)) {
         return Result.error(
-            new DispatchHandleUnvalidatedException(translatable("node.resolve.unvalidated"),
-                node.handle(), node));
+            new DispatchHandleUnvalidatedException(
+                translatable("node.resolve.unvalidated"), node.handle(), node));
       }
     }
     return Result.value(node);
   }
-
 }

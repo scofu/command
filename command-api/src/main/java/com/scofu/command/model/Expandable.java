@@ -11,16 +11,14 @@ import java.util.Optional;
  */
 public interface Expandable<R extends Expandable<R>> {
 
-  /**
-   * Returns the expansions.
-   */
+  /** Returns the expansions. */
   Map<Identifier<?>, Expansion<?>> expansions();
 
   /**
    * Returns the optional value of an optional expansion with the given identifier.
    *
    * @param identifier the identifier
-   * @param <T>        the type of the value
+   * @param <T> the type of the value
    */
   @SuppressWarnings("unchecked")
   default <T> Optional<T> expand(Identifier<T> identifier) {
@@ -33,12 +31,11 @@ public interface Expandable<R extends Expandable<R>> {
    * Maps the given identifier to an expansion.
    *
    * @param identifier the identifier
-   * @param <T>        the type of the identifier
+   * @param <T> the type of the identifier
    */
   @SuppressWarnings("unchecked")
   default <T> ExpansionBuilder<T, R> map(Identifier<T> identifier) {
     return RealExpansionBuilder.newRealExpansionBuilder(
         expansion -> expansions().put(identifier, expansion), (R) this);
   }
-
 }

@@ -4,9 +4,7 @@ import com.scofu.command.model.DiscoveryListener;
 import com.scofu.command.model.Identified;
 import com.scofu.command.model.Node;
 
-/**
- * Attaches descriptions to discovered nodes annotated with {@link Description}.
- */
+/** Attaches descriptions to discovered nodes annotated with {@link Description}. */
 public class DescriptionDiscoveryListener implements DiscoveryListener {
 
   @Override

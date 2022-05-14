@@ -1,8 +1,6 @@
 package com.scofu.command.validation;
 
-/**
- * Expansion type that identifies something that holds permissions.
- */
+/** Expansion type that identifies something that holds permissions. */
 public interface PermissionHolder {
 
   /**
@@ -11,5 +9,4 @@ public interface PermissionHolder {
    * @param permission the permission
    */
   boolean hasPermission(String permission);
-
 }

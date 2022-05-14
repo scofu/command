@@ -12,9 +12,7 @@ import com.scofu.command.model.Parameter;
 import java.util.List;
 import java.util.stream.Stream;
 
-/**
- * A target that automatically transforms strings to objects using transformers.
- */
+/** A target that automatically transforms strings to objects using transformers. */
 public class TransformingSuggester implements Suggester<List<String>> {
 
   private final TransformerMap transformerMap;
@@ -27,16 +25,23 @@ public class TransformingSuggester implements Suggester<List<String>> {
   @SuppressWarnings({"unchecked", "ConstantConditions", "rawtypes"})
   @Override
   public Stream<String> suggest(Command command, List<String> argument) {
-    final var arguments = RealArguments.newRealArguments(
-        (argument == null ? List.<String>of() : argument).iterator());
-    final var parameters = RealParameters.newRealParameters(
-        command.node().handle().parameters().iterator());
+    final var arguments =
+        RealArguments.newRealArguments(
+            (argument == null ? List.<String>of() : argument).iterator());
+    final var parameters =
+        RealParameters.newRealParameters(command.node().handle().parameters().iterator());
     while (parameters.hasNext()) {
       final var parameter = parameters.next();
-      final var transformer = transformerMap.get(parameter.type())
-          .orElseThrow(() -> new ParameterException(
-              translatable("transformer.parameter.missing_transformer",
-                  text(parameter.type().toString())), parameter));
+      final var transformer =
+          transformerMap
+              .get(parameter.type())
+              .orElseThrow(
+                  () ->
+                      new ParameterException(
+                          translatable(
+                              "transformer.parameter.missing_transformer",
+                              text(parameter.type().toString())),
+                          parameter));
       if (transformer.ignoresSuggestionsForParameter((Parameter) parameter)) {
         continue;
       }

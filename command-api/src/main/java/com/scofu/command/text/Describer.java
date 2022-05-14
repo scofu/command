@@ -19,7 +19,7 @@ public interface Describer<T> extends Feature, Predicate<Type> {
    * Returns an optional component describing the given parameter.
    *
    * @param parameter the parameter
-   * @param theme     the theme
+   * @param theme the theme
    */
   Optional<Component> describe(Parameter<T> parameter, Theme theme);
 }

@@ -12,16 +12,14 @@ import java.util.List;
  */
 public interface HandleBuilder<T, R> {
 
-  /**
-   * Adds a parameter.
-   */
+  /** Adds a parameter. */
   ParameterBuilder<T, R> withParameter();
 
   /**
    * Adds a parameter.
    *
-   * @param name        the name
-   * @param type        the type
+   * @param name the name
+   * @param type the type
    * @param annotations the annotations
    */
   HandleBuilder<T, R> withParameter(String name, Type type, Annotation... annotations);
@@ -33,8 +31,6 @@ public interface HandleBuilder<T, R> {
    */
   HandleBuilder<T, R> withParameters(List<Parameter<?>> parameters);
 
-  /**
-   * Sets the handle.
-   */
+  /** Sets the handle. */
   NodeBuilder<T, R> endHandle();
 }

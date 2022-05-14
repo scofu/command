@@ -26,9 +26,7 @@ import java.util.function.Function;
 import java.util.stream.Collector;
 import java.util.stream.Stream;
 
-/**
- * Real dispatcher.
- */
+/** Real dispatcher. */
 public class RealDispatcher implements Dispatcher {
 
   private final Map<Identifier<?>, Node<?, ?>> nodes;
@@ -44,25 +42,31 @@ public class RealDispatcher implements Dispatcher {
 
   @Override
   @SuppressWarnings("unchecked")
-  public <T, U, R> R dispatch(Context context, List<U> objects,
-      Collector<? super U, ?, T> collector) {
+  public <T, U, R> R dispatch(
+      Context context, List<U> objects, Collector<? super U, ?, T> collector) {
     final var identifiersOrArguments = PeekableIterator.wrap(objects.iterator());
     if (!identifiersOrArguments.hasNext()) {
       throw new DispatchException(translatable("dispatch.no_identifiers_or_arguments"));
     }
     final var identifiers = new ArrayList<Identifier<?>>();
-    final var result = resolveNodeByIdentifiers(context, validators,
-        NodeIdentifierIterator.dynamic(identifiersOrArguments, identifiers::add));
-    final var lastTestedIdentifier = identifiersOrArguments.peek()
-        .map(Identifier::identifier)
-        .orElse(null);
+    final var result =
+        resolveNodeByIdentifiers(
+            context,
+            validators,
+            NodeIdentifierIterator.dynamic(identifiersOrArguments, identifiers::add));
+    final var lastTestedIdentifier =
+        identifiersOrArguments.peek().map(Identifier::identifier).orElse(null);
     final var argument =
-        identifiersOrArguments.hasNext() ? Stream.iterate(identifiersOrArguments.next(),
-                Objects::nonNull,
-                unused -> identifiersOrArguments.hasNext() ? identifiersOrArguments.next() : null)
-            .collect(collector) : null;
+        identifiersOrArguments.hasNext()
+            ? Stream.iterate(
+                    identifiersOrArguments.next(),
+                    Objects::nonNull,
+                    unused ->
+                        identifiersOrArguments.hasNext() ? identifiersOrArguments.next() : null)
+                .collect(collector)
+            : null;
     if (result.hasError()) {
-      return context.onDispatchResolveError(identifiers, argument, result.error());
+      return context.onDispatchResolveError(identifiers, argument, result.theError());
     }
     final var node = (Node<T, R>) result.get();
     final var target = node.target();
@@ -82,35 +86,44 @@ public class RealDispatcher implements Dispatcher {
 
   @SuppressWarnings("unchecked")
   @Override
-  public <T, U, R> Stream<String> suggest(Context context, List<U> objects,
-      Collector<? super U, ?, T> collector) {
+  public <T, U, R> Stream<String> suggest(
+      Context context, List<U> objects, Collector<? super U, ?, T> collector) {
     final var identifiersOrArguments = PeekableIterator.wrap(objects.iterator());
     if (!identifiersOrArguments.hasNext()) {
       throw new DispatchException(translatable("dispatch.no_identifiers_or_arguments"));
     }
     final var lastParent = new AtomicReference<NodeTree>(this);
-    final var result = resolveNodeByIdentifiers(context, validators,
-        newParentTrackingIterator(identifiersOrArguments, lastParent));
+    final var result =
+        resolveNodeByIdentifiers(
+            context, validators, newParentTrackingIterator(identifiersOrArguments, lastParent));
     if (result.hasError()) {
       System.out.println(lastParent.get().nodes(context, validators));
-      return Stream.of(lastParent.get().nodes(context, validators).stream(),
+      return Stream.of(
+              lastParent.get().nodes(context, validators).stream(),
               lastParent.get().aliasedNodes(context, validators).stream())
           .flatMap(Function.identity())
           .map(Entry::getKey)
           .map(Identifier::toPath);
     }
     final var argument =
-        identifiersOrArguments.hasNext() ? Stream.iterate(identifiersOrArguments.next(),
-                Objects::nonNull,
-                unused -> identifiersOrArguments.hasNext() ? identifiersOrArguments.next() : null)
-            .collect(collector) : null;
+        identifiersOrArguments.hasNext()
+            ? Stream.iterate(
+                    identifiersOrArguments.next(),
+                    Objects::nonNull,
+                    unused ->
+                        identifiersOrArguments.hasNext() ? identifiersOrArguments.next() : null)
+                .collect(collector)
+            : null;
     final var node = (Node<T, R>) result.get();
     final var suggester = node.suggester();
-    final var children = node.nodes().isEmpty() ? Stream.<String>empty()
-        : Stream.concat(node.nodes(context, validators).stream(),
-                node.aliasedNodes(context, validators).stream())
-            .map(Entry::getKey)
-            .map(Identifier::toPath);
+    final var children =
+        node.nodes().isEmpty()
+            ? Stream.<String>empty()
+            : Stream.concat(
+                    node.nodes(context, validators).stream(),
+                    node.aliasedNodes(context, validators).stream())
+                .map(Entry::getKey)
+                .map(Identifier::toPath);
     if (suggester == null) {
       return Stream.concat(context.onSuggestNoSuggester(List.of(), node, argument), children);
     }

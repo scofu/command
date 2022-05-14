@@ -19,7 +19,7 @@ public interface Target<T, R> {
    * <p>Can be used to change output.
    *
    * @param target the target
-   * @param <V>    the type of the new output
+   * @param <V> the type of the new output
    */
   default <V> Target<T, V> then(Target<R, V> target) {
     return (command, argument) -> target.invoke(command, invoke(command, argument));
@@ -32,10 +32,11 @@ public interface Target<T, R> {
    * @param consumer the consumer
    */
   default Target<T, R> then(Consumer<R> consumer) {
-    return then((command, argument) -> {
-      consumer.accept(argument);
-      return argument;
-    });
+    return then(
+        (command, argument) -> {
+          consumer.accept(argument);
+          return argument;
+        });
   }
 
   /**
@@ -45,7 +46,7 @@ public interface Target<T, R> {
    * <p>Can be used to change input.
    *
    * @param target the target
-   * @param <V>    the type of the new input
+   * @param <V> the type of the new input
    */
   default <V> Target<V, R> compose(Target<V, T> target) {
     return (command, argument) -> invoke(command, target.invoke(command, argument));

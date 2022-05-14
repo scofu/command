@@ -3,9 +3,7 @@ package com.scofu.command.text;
 import com.scofu.command.internal.RealHelpMessageConfiguration;
 import java.util.Optional;
 
-/**
- * Configuration builder for {@link HelpMessageConfiguration}.
- */
+/** Configuration builder for {@link HelpMessageConfiguration}. */
 public class HelpMessageConfigurationBuilder {
 
   private String commandPrefix;
@@ -20,12 +18,9 @@ public class HelpMessageConfigurationBuilder {
     return this;
   }
 
-  /**
-   * Builds and returns a new help message configuration.
-   */
+  /** Builds and returns a new help message configuration. */
   public HelpMessageConfiguration build() {
     return RealHelpMessageConfiguration.newRealHelpMessageConfiguration(
         Optional.ofNullable(commandPrefix));
   }
-
 }

@@ -3,9 +3,7 @@ package com.scofu.command.model;
 import com.google.inject.Inject;
 import com.scofu.common.inject.AbstractFeatureManager;
 
-/**
- * Explores and registers transforming nodes in all features.
- */
+/** Explores and registers transforming nodes in all features. */
 public class DiscoveryManager extends AbstractFeatureManager {
 
   private final TransformingNodeDiscoverer transformingNodeDiscoverer;
