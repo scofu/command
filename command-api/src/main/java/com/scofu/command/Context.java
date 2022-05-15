@@ -4,13 +4,11 @@ import com.scofu.command.model.Expandable;
 import com.scofu.command.model.Expansion;
 import com.scofu.command.model.Identifier;
 import com.scofu.command.model.Node;
-import com.scofu.text.Theme;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 import javax.annotation.Nullable;
-import net.kyori.adventure.text.format.NamedTextColor;
 
 /**
  * Represents the context that is passed along the argument throughout the invocation and or
@@ -32,11 +30,6 @@ public interface Context extends Expandable<Context> {
    * Returns the locale.
    */
   Locale locale();
-
-  /**
-   * Returns the theme.
-   */
-  Theme theme();
 
   /**
    * Called when an exception occurred whilst resolving a node.
@@ -125,29 +118,6 @@ public interface Context extends Expandable<Context> {
   record Simple(Locale locale, Map<Identifier<?>, Expansion<?>> expansions) implements Context {
 
     private static final Simple SIMPLE = new Simple(Locale.US, new ConcurrentHashMap<>());
-    private static final Theme SIMPLE_THEME = Theme.builder()
-        .withBlack(NamedTextColor.BLACK)
-        .withBlue(NamedTextColor.DARK_BLUE)
-        .withGreen(NamedTextColor.DARK_GREEN)
-        .withCyan(NamedTextColor.DARK_AQUA)
-        .withRed(NamedTextColor.DARK_RED)
-        .withPurple(NamedTextColor.DARK_PURPLE)
-        .withYellow(NamedTextColor.GOLD)
-        .withWhite(NamedTextColor.GRAY)
-        .withBrightBlack(NamedTextColor.DARK_GRAY)
-        .withBrightBlue(NamedTextColor.BLUE)
-        .withBrightGreen(NamedTextColor.GREEN)
-        .withBrightCyan(NamedTextColor.AQUA)
-        .withBrightRed(NamedTextColor.RED)
-        .withBrightPurple(NamedTextColor.LIGHT_PURPLE)
-        .withBrightYellow(NamedTextColor.YELLOW)
-        .withBrightWhite(NamedTextColor.WHITE)
-        .build();
-
-    @Override
-    public Theme theme() {
-      return SIMPLE_THEME;
-    }
 
     @Override
     public <T, R> R onDispatchResolveError(Iterable<? extends Identifier<?>> identifiers,

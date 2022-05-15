@@ -10,7 +10,6 @@ import com.scofu.command.ParameterException;
 import com.scofu.command.model.Expansion;
 import com.scofu.command.model.Identifier;
 import com.scofu.command.model.Node;
-import com.scofu.text.Theme;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -26,7 +25,6 @@ public class AudienceContext implements Context {
   private final Audience audience;
   private final Locale locale;
   private final HelpMessageGenerator helpMessageGenerator;
-  private final Theme theme;
 
   /**
    * Constructs a new audience based context.
@@ -34,18 +32,15 @@ public class AudienceContext implements Context {
    * @param audience             the audience
    * @param locale               the locale
    * @param helpMessageGenerator the help message generator
-   * @param theme                the theme
    */
   public AudienceContext(Audience audience, Locale locale,
-      HelpMessageGenerator helpMessageGenerator, Theme theme) {
+      HelpMessageGenerator helpMessageGenerator) {
     checkNotNull(audience, "audience");
     checkNotNull(locale, "locale");
     checkNotNull(helpMessageGenerator, "helpMessageGenerator");
-    checkNotNull(theme, "theme");
     this.audience = audience;
     this.locale = locale;
     this.helpMessageGenerator = helpMessageGenerator;
-    this.theme = theme;
     this.expansions = new ConcurrentHashMap<>();
   }
 
@@ -55,21 +50,16 @@ public class AudienceContext implements Context {
   }
 
   @Override
-  public Theme theme() {
-    return theme;
-  }
-
-  @Override
   public <T, R> R onDispatchResolveError(Iterable<? extends Identifier<?>> identifiers, T argument,
       Throwable throwable) {
     if (throwable instanceof DispatchHandleUnvalidatedException unvalidatedException) {
       error().text("dispatch.resolve.unvalidated")
           .prefixed()
-          .renderTo(theme, audience::sendMessage);
+          .render(audience::sendMessage);
       return null;
     }
 
-    error().text("dispatch.resolve.error").prefixed().renderTo(theme, audience::sendMessage);
+    error().text("dispatch.resolve.error").prefixed().render(audience::sendMessage);
     throwable.printStackTrace();
     return null;
   }
@@ -96,11 +86,11 @@ public class AudienceContext implements Context {
       audience.sendMessage(
           newline().append(helpMessageGenerator.generateFullUsage(this, identifiers, node, null))
               .append(newline())
-              .append(helpMessageGenerator.describeParameterError(parameterException, theme))
+              .append(helpMessageGenerator.describeParameterError(parameterException))
               .append(newline()));
       return null;
     }
-    error().text("dispatch.invoke.error").prefixed().renderTo(theme, audience::sendMessage);
+    error().text("dispatch.invoke.error").prefixed().render(audience::sendMessage);
     throwable.printStackTrace();
     return null;
   }

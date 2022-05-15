@@ -4,7 +4,7 @@ import static net.kyori.adventure.text.Component.translatable;
 
 import com.scofu.command.model.Parameter;
 import com.scofu.command.text.Describer;
-import com.scofu.text.Theme;
+import com.scofu.text.Color;
 import java.lang.reflect.Type;
 import java.util.Optional;
 import net.kyori.adventure.text.Component;
@@ -17,9 +17,9 @@ final class StringDescriber implements Describer<String> {
   }
 
   @Override
-  public Optional<Component> describe(Parameter<String> parameter, Theme theme) {
+  public Optional<Component> describe(Parameter<String> parameter) {
     return Optional.of(translatable("string.parameter.description",
-        translatable(parameter.nameOrTranslation()).color(theme.brightWhite())).color(
-        theme.white()));
+        translatable(parameter.nameOrTranslation()).color(Color.BRIGHT_WHITE)).color(
+        Color.WHITE));
   }
 }

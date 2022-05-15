@@ -2,7 +2,6 @@ package com.scofu.command.text;
 
 import com.scofu.command.model.Parameter;
 import com.scofu.common.inject.Feature;
-import com.scofu.text.Theme;
 import java.lang.reflect.Type;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -19,7 +18,6 @@ public interface Describer<T> extends Feature, Predicate<Type> {
    * Returns an optional component describing the given parameter.
    *
    * @param parameter the parameter
-   * @param theme the theme
    */
-  Optional<Component> describe(Parameter<T> parameter, Theme theme);
+  Optional<Component> describe(Parameter<T> parameter);
 }

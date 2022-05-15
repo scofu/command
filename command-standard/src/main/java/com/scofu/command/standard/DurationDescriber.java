@@ -4,7 +4,7 @@ import static net.kyori.adventure.text.Component.translatable;
 
 import com.scofu.command.model.Parameter;
 import com.scofu.command.text.Describer;
-import com.scofu.text.Theme;
+import com.scofu.text.Color;
 import java.lang.reflect.Type;
 import java.time.Duration;
 import java.util.Optional;
@@ -18,9 +18,9 @@ final class DurationDescriber implements Describer<Duration> {
   }
 
   @Override
-  public Optional<Component> describe(Parameter<Duration> parameter, Theme theme) {
+  public Optional<Component> describe(Parameter<Duration> parameter) {
     return Optional.of(translatable("duration.parameter.description",
-        translatable(parameter.nameOrTranslation()).color(theme.brightWhite())).color(
-        theme.white()));
+        translatable(parameter.nameOrTranslation()).color(Color.BRIGHT_WHITE)).color(
+        Color.WHITE));
   }
 }
