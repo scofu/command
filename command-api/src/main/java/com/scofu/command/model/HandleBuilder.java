@@ -1,36 +1,96 @@
 package com.scofu.command.model;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Type;
+import com.google.common.collect.Lists;
+import com.scofu.common.AbstractBuilder;
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Builds handles.
  *
- * @param <T> the type of the input to the node
  * @param <R> the type of the parent
  */
-public interface HandleBuilder<T, R> {
+public class HandleBuilder<R> extends AbstractBuilder<Handle, R, HandleBuilder<R>> {
 
-  /** Adds a parameter. */
-  ParameterBuilder<T, R> withParameter();
+  private List<Parameter<?>> parameters;
 
   /**
-   * Adds a parameter.
+   * Constructs a new handle builder.
    *
-   * @param name the name
-   * @param type the type
-   * @param annotations the annotations
+   * @param from the from
+   * @param parent the parent
+   * @param consumer the consumer
    */
-  HandleBuilder<T, R> withParameter(String name, Type type, Annotation... annotations);
+  public HandleBuilder(
+      @Nullable Handle from, @Nullable Supplier<R> parent, @Nullable Consumer<Handle> consumer) {
+    super(from, parent, consumer);
+  }
+
+  /**
+   * Constructs a new handle builder.
+   *
+   * @param parent the parent
+   * @param consumer the consumer
+   */
+  public HandleBuilder(@Nullable Supplier<R> parent, @Nullable Consumer<Handle> consumer) {
+    super(parent, consumer);
+  }
+
+  /**
+   * Constructs a new handle builder.
+   *
+   * @param from the from
+   */
+  public HandleBuilder(@Nullable Handle from) {
+    super(from);
+  }
+
+  /** Constructs a new handle builder. */
+  public HandleBuilder() {}
+
+  @Override
+  protected void initializeFrom(Handle handle) {
+    parameters = Lists.newArrayList(handle.parameters());
+  }
+
+  @Override
+  public Handle build() {
+    return new Handle(optional(parameters).orElseGet(List::of));
+  }
+
+  /**
+   * Adds the given parameter.
+   *
+   * @param parameter the parameter
+   * @param <T> the type of the parameter's type
+   */
+  public <T> HandleBuilder<R> parameter(Parameter<T> parameter) {
+    if (parameters == null) {
+      parameters = Lists.newArrayList();
+    }
+    parameters.add(parameter);
+    return this;
+  }
+
+  /** Builds a parameter and adds it. */
+  public ParameterBuilder<Void, HandleBuilder<R>> parameter() {
+    return new ParameterBuilder<>(() -> this, this::parameter);
+  }
 
   /**
    * Sets the parameters.
    *
-   * @param parameters the parameters.
+   * @param parameters the parameters
    */
-  HandleBuilder<T, R> withParameters(List<Parameter<?>> parameters);
+  public HandleBuilder<R> parameters(List<Parameter<?>> parameters) {
+    this.parameters = parameters;
+    return this;
+  }
 
-  /** Sets the handle. */
-  NodeBuilder<T, R> endHandle();
+  /** Returns the parent. */
+  public R endHandle() {
+    return end();
+  }
 }

@@ -1,6 +1,5 @@
 package com.scofu.command.model;
 
-import com.scofu.command.internal.RealNodeBuilder;
 import com.scofu.command.target.Suggester;
 import com.scofu.command.target.Target;
 import com.scofu.common.Expandable;
@@ -8,7 +7,7 @@ import com.scofu.common.ExpansionMap;
 import com.scofu.common.Identifier;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Stream;
+import java.util.concurrent.atomic.AtomicReference;
 import javax.annotation.Nullable;
 
 /**
@@ -44,16 +43,18 @@ public record Node<T, R>(
     implements NodeTree, Expandable<Node<T, R>> {
 
   /**
-   * Returns a new builder.
+   * Creates and returns a new builder.
    *
-   * @param identifier the identifier
-   * @param aliases the aliases
-   * @param <T> the type of the input to the node
-   * @param <R> the type of the output from the node
+   * @param <T> the type of the input
+   * @param <R> the type of the output
    */
-  public static <T, R> NodeBuilder<T, R> builder(
-      Identifier<?> identifier, Identifier<?>... aliases) {
-    return RealNodeBuilder.newRealNodeBuilder(
-        null, null, Stream.concat(Stream.of(identifier), Stream.of(aliases)).toList());
+  public static <T, R> NodeBuilder<T, R, Void> node() {
+    return new NodeBuilder<>();
+  }
+
+  /** Returns a new builder from this. */
+  public NodeBuilder<T, R, Node<T, R>> toBuilder() {
+    final var result = new AtomicReference<Node<T, R>>();
+    return new NodeBuilder<>(this, result::get, result::set);
   }
 }

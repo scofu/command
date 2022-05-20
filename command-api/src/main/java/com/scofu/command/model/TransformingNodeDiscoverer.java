@@ -1,8 +1,10 @@
 package com.scofu.command.model;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.scofu.command.model.Node.node;
 import static com.scofu.common.Identifier.identifier;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.inject.Inject;
 import com.scofu.command.Dispatcher;
@@ -149,9 +151,11 @@ public class TransformingNodeDiscoverer {
       Identified identified,
       Identifier<Object> identifier,
       Identifier<?>[] aliases) {
+    final var identifiers = Lists.<Identifier<?>>newArrayList(identifier);
+    identifiers.addAll(List.of(aliases));
     final Node<?, ?> node;
     if (identified.futile()) {
-      node = Node.builder(identifier, aliases).map(Identified.METHOD_IDENTIFIER).to(method).build();
+      node = node().identifiers(identifiers).map(Identified.METHOD_IDENTIFIER).to(method).build();
     } else {
       Target<List<String>, ?> target;
       if (identified.async()) {
@@ -163,14 +167,15 @@ public class TransformingNodeDiscoverer {
         target = transformingTarget.then(new MethodTarget<>(method, instance));
       }
       node =
-          Node.builder(identifier, aliases)
-              .withHandle()
-              .withParameters(parseParameters(method))
+          node()
+              .identifiers(identifiers)
+              .handle()
+              .parameters(parseParameters(method))
               .endHandle()
               .map(Identified.METHOD_IDENTIFIER)
               .to(method)
-              .withTarget(target)
-              .withSuggester(transformingSuggester)
+              .target(target)
+              .suggester(transformingSuggester)
               .build();
     }
     return node;

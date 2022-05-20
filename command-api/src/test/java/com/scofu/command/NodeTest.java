@@ -1,13 +1,13 @@
 package com.scofu.command;
 
 import static com.scofu.command.Context.simpleContext;
+import static com.scofu.command.model.Node.node;
 import static com.scofu.common.Identifier.identifier;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.scofu.command.model.Node;
 import com.scofu.command.validation.Permission;
 import com.scofu.command.validation.PermissionValidator;
 import java.util.Set;
@@ -18,15 +18,14 @@ public class NodeTest {
 
   @Test
   public void testIdentifiers() {
-    final var test = Node.builder(identifier("test")).build();
+    final var test = node().identifier("test").build();
     assertEquals(test.identifiers().size(), 1);
     assertEquals(test.identifiers().iterator().next(), identifier("test"));
   }
 
   @Test
   public void testChild() throws Throwable {
-    final var test =
-        Node.builder(identifier("test")).withChild(identifier("child")).endChild().build();
+    final var test = node().identifier("test").child().identifier("child").endNode().build();
     final var childResult =
         test.validateDirectChildByIdentifier(simpleContext(), Set.of(), true, identifier("child"));
     assertFalse(childResult.hasError());
@@ -36,11 +35,13 @@ public class NodeTest {
   @Test
   public void testValidateChildNoPermission() throws Throwable {
     final var test =
-        Node.builder(identifier("test"))
-            .withChild(identifier("child"))
+        node()
+            .identifier("test")
+            .child()
+            .identifier("child")
             .map(Permission.PERMISSION_IDENTIFIER)
             .to("test.permission")
-            .endChild()
+            .endNode()
             .build();
     final var context = simpleContext().map(Permission.HOLDER_IDENTIFIER).to(permission -> false);
     final var childResult =
@@ -53,11 +54,13 @@ public class NodeTest {
   @Test
   public void testValidateChildWithPermission() throws Throwable {
     final var node =
-        Node.builder(identifier("test"))
-            .withChild(identifier("child"))
+        node()
+            .identifier("test")
+            .child()
+            .identifier("child")
             .map(Permission.PERMISSION_IDENTIFIER)
             .to("test.permission")
-            .endChild()
+            .endNode()
             .build();
     final var context =
         simpleContext()
