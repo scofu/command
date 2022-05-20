@@ -12,10 +12,10 @@ import com.google.inject.Inject;
 import com.scofu.command.Context;
 import com.scofu.command.ParameterException;
 import com.scofu.command.model.Handle;
-import com.scofu.command.model.Identifier;
 import com.scofu.command.model.Node;
 import com.scofu.command.model.Parameter;
 import com.scofu.command.validation.Validator;
+import com.scofu.common.Identifier;
 import com.scofu.text.Color;
 import java.lang.reflect.ParameterizedType;
 import java.util.Comparator;
@@ -28,9 +28,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent.Builder;
 import org.jetbrains.annotations.Nullable;
 
-/**
- * Generates help messages.
- */
+/** Generates help messages. */
 public class HelpMessageGenerator {
 
   private final HelpMessageConfiguration helpMessageConfiguration;
@@ -39,8 +37,11 @@ public class HelpMessageGenerator {
   private final UsageGenerator usageGenerator;
 
   @Inject
-  HelpMessageGenerator(HelpMessageConfiguration helpMessageConfiguration, Set<Validator> validators,
-      DescriberMap describerMap, UsageGenerator usageGenerator) {
+  HelpMessageGenerator(
+      HelpMessageConfiguration helpMessageConfiguration,
+      Set<Validator> validators,
+      DescriberMap describerMap,
+      UsageGenerator usageGenerator) {
     this.helpMessageConfiguration = helpMessageConfiguration;
     this.validators = validators;
     this.describerMap = describerMap;
@@ -56,9 +57,12 @@ public class HelpMessageGenerator {
     checkNotNull(parameterException, "parameterException");
     final var builder = text();
     final var parameter = parameterException.parameter();
-    builder.append(translatable("dispatch.invoke.parameter.error",
-        describeParameter(parameter).orElseGet(
-            () -> translatable(parameter.nameOrTranslation())), newline()));
+    builder.append(
+        translatable(
+            "dispatch.invoke.parameter.error",
+            describeParameter(parameter)
+                .orElseGet(() -> translatable(parameter.nameOrTranslation())),
+            newline()));
     describerParameterError(builder, parameterException);
     return builder.build();
   }
@@ -66,57 +70,72 @@ public class HelpMessageGenerator {
   /**
    * Returns a component describing the full usage a node.
    *
-   * @param context              the context
-   * @param identifiers          the identifiers
-   * @param node                 the node
+   * @param context the context
+   * @param identifiers the identifiers
+   * @param node the node
    * @param lastTestedIdentifier the last tested identifier
-   * @param <T>                  the type of the input
-   * @param <R>                  the type of the output
+   * @param <T> the type of the input
+   * @param <R> the type of the output
    */
-  public <T, R> Component generateFullUsage(Context context,
-      Iterable<? extends Identifier<?>> identifiers, Node<T, R> node,
+  public <T, R> Component generateFullUsage(
+      Context context,
+      Iterable<? extends Identifier<?>> identifiers,
+      Node<T, R> node,
       @Nullable Identifier<?> lastTestedIdentifier) {
     checkNotNull(context, "context");
     checkNotNull(identifiers, "identifiers");
     checkNotNull(node, "node");
     final var rootPathBuilder = text();
     final var rootParameters = text();
-    rootPathBuilder.append(helpMessageConfiguration.commandPrefix()
-            .map(Component::text)
-            .orElse(empty())
-            .color(Color.WHITE))
-        .append(StreamSupport.stream(identifiers.spliterator(), false)
-            .map(Identifier::toPath)
-            .map(Component::text)
-            .collect(toComponent(space()))
-            .color(Color.WHITE));
+    rootPathBuilder
+        .append(
+            helpMessageConfiguration
+                .commandPrefix()
+                .map(Component::text)
+                .orElse(empty())
+                .color(Color.WHITE))
+        .append(
+            StreamSupport.stream(identifiers.spliterator(), false)
+                .map(Identifier::toPath)
+                .map(Component::text)
+                .collect(toComponent(space()))
+                .color(Color.WHITE));
     if (node.target() != null) {
-      rootParameters.append(describeParameters(node).orElse(empty())
-          .color(Color.BRIGHT_WHITE));
+      rootParameters.append(describeParameters(node).orElse(empty()).color(Color.BRIGHT_WHITE));
     }
     if (node.nodes(context, validators).isEmpty()) {
-      return usageGenerator.generate(node, rootPathBuilder.build(),
-          rootParameters.build());
+      return usageGenerator.generate(node, rootPathBuilder.build(), rootParameters.build());
     } else {
       final var resultBuilder = text();
       final var rootPathComponent = rootPathBuilder.build();
       if (lastTestedIdentifier != null) {
         resultBuilder.append(
-            translatable("dispatch.invoke.unknown_subcommand", text(lastTestedIdentifier.toPath()),
-                rootPathComponent, newline()).color(Color.BRIGHT_RED));
+            translatable(
+                    "dispatch.invoke.unknown_subcommand",
+                    text(lastTestedIdentifier.toPath()),
+                    rootPathComponent,
+                    newline())
+                .color(Color.BRIGHT_RED));
       }
       if (node.target() != null) {
-        resultBuilder.append(usageGenerator.generate(node, rootPathComponent,
-            rootParameters.build())).append(newline());
+        resultBuilder
+            .append(usageGenerator.generate(node, rootPathComponent, rootParameters.build()))
+            .append(newline());
       }
-      resultBuilder.append(node.nodes(context, validators)
-          .stream()
-          .sorted(Comparator.comparing(entry -> entry.getKey().toPath()))
-          .map(entry -> generateFullUsage(context,
-              Stream.of(identifiers.spliterator(), List.of(entry.getKey()).spliterator())
-                  .flatMap(i -> StreamSupport.stream(i, false))
-                  .toList(), entry.getValue(), null))
-          .collect(toComponent(newline())));
+      resultBuilder.append(
+          node.nodes(context, validators).stream()
+              .sorted(Comparator.comparing(entry -> entry.getKey().toPath()))
+              .map(
+                  entry ->
+                      generateFullUsage(
+                          context,
+                          Stream.of(
+                                  identifiers.spliterator(), List.of(entry.getKey()).spliterator())
+                              .flatMap(i -> StreamSupport.stream(i, false))
+                              .toList(),
+                          entry.getValue(),
+                          null))
+              .collect(toComponent(newline())));
       return resultBuilder.build();
     }
   }
@@ -125,10 +144,12 @@ public class HelpMessageGenerator {
     if (parameterException.getCause() instanceof ParameterException cause) {
       describerParameterError(builder, cause);
     } else if (parameterException.getCause() != null) {
-      builder.append(text("⚠ ").color(Color.BRIGHT_RED))
+      builder
+          .append(text("⚠ ").color(Color.BRIGHT_RED))
           .append(text(parameterException.getCause().getMessage()).color(Color.BRIGHT_RED));
     } else {
-      builder.append(text("⚠ ").color(Color.BRIGHT_RED))
+      builder
+          .append(text("⚠ ").color(Color.BRIGHT_RED))
           .append(parameterException.message().color(Color.BRIGHT_RED));
     }
   }
@@ -140,11 +161,13 @@ public class HelpMessageGenerator {
       if (Optional.class.isAssignableFrom(type)
           && parameterizedType.getActualTypeArguments().length > 0) {
         final var typeArgument = parameterizedType.getActualTypeArguments()[0];
-        return describerMap.get(typeArgument)
+        return describerMap
+            .get(typeArgument)
             .flatMap(describer -> ((Describer<T>) describer).describe(parameter));
       }
     }
-    return describerMap.get(parameter.type())
+    return describerMap
+        .get(parameter.type())
         .flatMap(describer -> ((Describer<T>) describer).describe(parameter));
   }
 
@@ -155,18 +178,28 @@ public class HelpMessageGenerator {
       if (Optional.class.isAssignableFrom(type)
           && parameterizedType.getActualTypeArguments().length > 0) {
         final var typeArgument = parameterizedType.getActualTypeArguments()[0];
-        return describerMap.get(typeArgument)
+        return describerMap
+            .get(typeArgument)
             .flatMap(describer -> ((Describer<T>) describer).describe(parameter))
-            .map(component -> translatable("parameter.optional.format",
-                translatable("parameter.optional.prefix"), component,
-                translatable("parameter.optional.suffix")));
+            .map(
+                component ->
+                    translatable(
+                        "parameter.optional.format",
+                        translatable("parameter.optional.prefix"),
+                        component,
+                        translatable("parameter.optional.suffix")));
       }
     }
-    return describerMap.get(parameter.type())
+    return describerMap
+        .get(parameter.type())
         .flatMap(describer -> ((Describer<T>) describer).describe(parameter))
-        .map(component -> translatable("parameter.required.format",
-            translatable("parameter.required.prefix"), component,
-            translatable("parameter.required.suffix")));
+        .map(
+            component ->
+                translatable(
+                    "parameter.required.format",
+                    translatable("parameter.required.prefix"),
+                    component,
+                    translatable("parameter.required.suffix")));
   }
 
   private <T, R> Optional<Component> describeParameters(Node<T, R> node) {
@@ -190,5 +223,4 @@ public class HelpMessageGenerator {
     }
     return component;
   }
-
 }

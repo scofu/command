@@ -9,6 +9,7 @@ import com.scofu.command.DispatchException;
 import com.scofu.command.DispatchHandleUnvalidatedException;
 import com.scofu.command.Result;
 import com.scofu.command.validation.Validator;
+import com.scofu.common.Identifier;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;

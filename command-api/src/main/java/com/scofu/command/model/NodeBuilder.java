@@ -2,6 +2,8 @@ package com.scofu.command.model;
 
 import com.scofu.command.target.Suggester;
 import com.scofu.command.target.Target;
+import com.scofu.common.Expandable;
+import com.scofu.common.Identifier;
 
 /**
  * Builds nodes.

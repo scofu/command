@@ -1,7 +1,7 @@
 package com.scofu.command;
 
 import static com.scofu.command.Context.simpleContext;
-import static com.scofu.command.model.Identifier.identifier;
+import static com.scofu.common.Identifier.identifier;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.google.inject.Inject;

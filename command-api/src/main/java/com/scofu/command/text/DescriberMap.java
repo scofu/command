@@ -1,6 +1,6 @@
 package com.scofu.command.text;
 
-import com.scofu.command.ConcurrentDynamicMap;
+import com.scofu.common.collect.ConcurrentDynamicMap;
 import java.lang.reflect.Type;
 
 /** A concurrent dynamic map of describers. */

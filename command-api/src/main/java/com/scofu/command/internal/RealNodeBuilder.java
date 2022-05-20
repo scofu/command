@@ -2,14 +2,14 @@ package com.scofu.command.internal;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.scofu.command.model.Expansion;
 import com.scofu.command.model.Handle;
 import com.scofu.command.model.HandleBuilder;
-import com.scofu.command.model.Identifier;
 import com.scofu.command.model.Node;
 import com.scofu.command.model.NodeBuilder;
 import com.scofu.command.target.Suggester;
 import com.scofu.command.target.Target;
+import com.scofu.common.ExpansionMap;
+import com.scofu.common.Identifier;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -24,7 +24,7 @@ public class RealNodeBuilder<T, R> implements NodeBuilder<T, R> {
   private final Map<Identifier<?>, Node<?, ?>> aliasedChildren;
   private final Consumer<Node<?, ?>> consumer;
   private final List<? extends Identifier<?>> identifiers;
-  private Map<Identifier<?>, Expansion<?>> expansions;
+  private ExpansionMap expansions;
   private NodeBuilder<?, ?> parent;
   private Handle handle;
   private Target<?, ?> target;
@@ -47,7 +47,7 @@ public class RealNodeBuilder<T, R> implements NodeBuilder<T, R> {
       Map<Identifier<?>, Node<?, ?>> aliasedChildren,
       Consumer<Node<?, ?>> consumer,
       List<? extends Identifier<?>> identifiers,
-      Map<Identifier<?>, Expansion<?>> expansions,
+      ExpansionMap expansions,
       Handle handle,
       Target<?, ?> target,
       Suggester<?> suggester) {
@@ -132,7 +132,7 @@ public class RealNodeBuilder<T, R> implements NodeBuilder<T, R> {
             suggester,
             children,
             aliasedChildren,
-            expansions == null ? new ConcurrentHashMap<>() : expansions));
+            expansions == null ? ExpansionMap.expansionMap() : expansions));
     return parent;
   }
 
@@ -149,13 +149,13 @@ public class RealNodeBuilder<T, R> implements NodeBuilder<T, R> {
         suggester,
         children,
         aliasedChildren,
-        expansions == null ? new ConcurrentHashMap<>() : expansions);
+        expansions == null ? ExpansionMap.expansionMap() : expansions);
   }
 
   @Override
-  public Map<Identifier<?>, Expansion<?>> expansions() {
+  public ExpansionMap expansions() {
     if (expansions == null) {
-      expansions = new ConcurrentHashMap<>();
+      expansions = ExpansionMap.expansionMap();
     }
     return expansions;
   }

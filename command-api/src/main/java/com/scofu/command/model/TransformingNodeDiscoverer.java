@@ -1,7 +1,7 @@
 package com.scofu.command.model;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.scofu.command.model.Identifier.identifier;
+import static com.scofu.common.Identifier.identifier;
 
 import com.google.common.collect.Maps;
 import com.google.inject.Inject;
@@ -12,6 +12,7 @@ import com.scofu.command.target.Target;
 import com.scofu.command.target.TransformingSuggester;
 import com.scofu.command.target.TransformingTarget;
 import com.scofu.command.text.Translation;
+import com.scofu.common.Identifier;
 import java.lang.reflect.Method;
 import java.util.LinkedHashSet;
 import java.util.List;

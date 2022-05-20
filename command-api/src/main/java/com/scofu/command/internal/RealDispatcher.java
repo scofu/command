@@ -1,7 +1,7 @@
 package com.scofu.command.internal;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.scofu.command.model.Identifier.identifier;
+import static com.scofu.common.Identifier.identifier;
 import static net.kyori.adventure.text.Component.translatable;
 
 import com.google.inject.Inject;
@@ -9,12 +9,12 @@ import com.scofu.command.Context;
 import com.scofu.command.DispatchException;
 import com.scofu.command.Dispatcher;
 import com.scofu.command.PeekableIterator;
-import com.scofu.command.model.Identifier;
 import com.scofu.command.model.Node;
 import com.scofu.command.model.NodeIdentifierIterator;
 import com.scofu.command.model.NodeTree;
 import com.scofu.command.target.Command;
 import com.scofu.command.validation.Validator;
+import com.scofu.common.Identifier;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;

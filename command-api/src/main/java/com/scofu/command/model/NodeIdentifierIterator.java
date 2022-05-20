@@ -1,8 +1,9 @@
 package com.scofu.command.model;
 
-import static com.scofu.command.model.Identifier.identifier;
+import static com.scofu.common.Identifier.identifier;
 
 import com.scofu.command.PeekableIterator;
+import com.scofu.common.Identifier;
 import java.util.function.Consumer;
 
 /** Iterates over node identifiers with information about the parent. */

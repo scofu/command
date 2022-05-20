@@ -1,8 +1,9 @@
 package com.scofu.command.model;
 
-import static com.scofu.command.model.Identifier.identifier;
+import static com.scofu.common.Identifier.identifier;
 
 import com.scofu.command.target.FutureTarget;
+import com.scofu.common.Identifier;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Repeatable;
 import java.lang.annotation.Retention;

@@ -5,6 +5,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import com.scofu.command.model.HandleBuilder;
 import com.scofu.command.model.Parameter;
 import com.scofu.command.model.ParameterBuilder;
+import com.scofu.common.reflect.ListBasedAnnotatedElement;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.util.Collection;

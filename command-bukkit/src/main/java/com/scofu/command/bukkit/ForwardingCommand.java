@@ -1,14 +1,14 @@
 package com.scofu.command.bukkit;
 
-import static com.scofu.command.model.Identifier.identifier;
+import static com.scofu.common.Identifier.identifier;
 
 import com.scofu.command.Dispatcher;
-import com.scofu.command.model.Expansion;
-import com.scofu.command.model.Identifier;
 import com.scofu.command.model.Node;
 import com.scofu.command.text.AudienceContext;
 import com.scofu.command.text.HelpMessageGenerator;
 import com.scofu.command.validation.Permission;
+import com.scofu.common.Expansion;
+import com.scofu.common.Identifier;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -25,33 +25,38 @@ final class ForwardingCommand extends BukkitCommand {
   private final Dispatcher dispatcher;
   private final HelpMessageGenerator helpMessageGenerator;
 
-  ForwardingCommand(Node<?, ?> node, Dispatcher dispatcher,
-      HelpMessageGenerator helpMessageGenerator) {
+  ForwardingCommand(
+      Node<?, ?> node, Dispatcher dispatcher, HelpMessageGenerator helpMessageGenerator) {
     super(node.identifiers().get(0).toPath());
     this.dispatcher = dispatcher;
     this.helpMessageGenerator = helpMessageGenerator;
     setAliases(node.identifiers().stream().skip(1).map(Identifier::toPath).toList());
     System.out.println("node.identifiers() = " + node.identifiers());
-    System.out.println("node.expansions() = " + node.expansions()
-        .values()
-        .stream()
-        .map(Expansion::get)
-        .filter(Optional::isPresent)
-        .map(Optional::get)
-        .map(Object::toString)
-        .toList());
+    System.out.println(
+        "node.expansions() = "
+            + node.expansions().values().stream()
+                .map(Expansion::get)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .map(Object::toString)
+                .toList());
     node.expand(Permission.PERMISSION_IDENTIFIER).ifPresent(this::setPermission);
   }
 
   @Override
   public boolean execute(CommandSender commandSender, String alias, String[] args) {
-    final var command = Stream.concat(Stream.of(
-            alias.startsWith(ForwardingDiscoveryListener.FALLBACK_PREFIX + ":") ? alias.split(
-                ForwardingDiscoveryListener.FALLBACK_PREFIX + ":", 2)[1] : alias), Stream.of(args))
-        .collect(Collectors.joining(" "));
+    final var command =
+        Stream.concat(
+                Stream.of(
+                    alias.startsWith(ForwardingDiscoveryListener.FALLBACK_PREFIX + ":")
+                        ? alias.split(ForwardingDiscoveryListener.FALLBACK_PREFIX + ":", 2)[1]
+                        : alias),
+                Stream.of(args))
+            .collect(Collectors.joining(" "));
     final var locale = getLocale(commandSender);
     final var context = new AudienceContext(commandSender, locale, helpMessageGenerator);
-    context.map(Permission.HOLDER_IDENTIFIER)
+    context
+        .map(Permission.HOLDER_IDENTIFIER)
         .to(permission -> commandSender.isOp() || commandSender.hasPermission(permission));
     context.map(identifier("source")).to(commandSender);
     dispatcher.dispatchString(context, command);
@@ -59,16 +64,22 @@ final class ForwardingCommand extends BukkitCommand {
   }
 
   @Override
-  public List<String> tabComplete(CommandSender commandSender, String alias, String[] args,
-      Location location) throws IllegalArgumentException {
-    var command = Stream.of(Stream.of(
-            alias.startsWith(ForwardingDiscoveryListener.FALLBACK_PREFIX + ":") ? alias.split(
-                ForwardingDiscoveryListener.FALLBACK_PREFIX + ":", 2)[1] : alias), Stream.of(args))
-        .flatMap(Function.identity())
-        .collect(Collectors.joining(" "));
+  public List<String> tabComplete(
+      CommandSender commandSender, String alias, String[] args, Location location)
+      throws IllegalArgumentException {
+    var command =
+        Stream.of(
+                Stream.of(
+                    alias.startsWith(ForwardingDiscoveryListener.FALLBACK_PREFIX + ":")
+                        ? alias.split(ForwardingDiscoveryListener.FALLBACK_PREFIX + ":", 2)[1]
+                        : alias),
+                Stream.of(args))
+            .flatMap(Function.identity())
+            .collect(Collectors.joining(" "));
     final var locale = getLocale(commandSender);
     final var context = new AudienceContext(commandSender, locale, helpMessageGenerator);
-    context.map(Permission.HOLDER_IDENTIFIER)
+    context
+        .map(Permission.HOLDER_IDENTIFIER)
         .to(permission -> commandSender.isOp() || commandSender.hasPermission(permission));
     context.map(identifier("source")).to(commandSender);
     return dispatcher.suggestString(context, command).filter(s -> filtered(s, args)).toList();

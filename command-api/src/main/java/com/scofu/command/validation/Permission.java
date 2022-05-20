@@ -1,8 +1,8 @@
 package com.scofu.command.validation;
 
-import static com.scofu.command.model.Identifier.identifier;
+import static com.scofu.common.Identifier.identifier;
 
-import com.scofu.command.model.Identifier;
+import com.scofu.common.Identifier;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

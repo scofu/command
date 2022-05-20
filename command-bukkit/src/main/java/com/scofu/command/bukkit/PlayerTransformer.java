@@ -1,6 +1,6 @@
 package com.scofu.command.bukkit;
 
-import static com.scofu.command.model.Identifier.identifier;
+import static com.scofu.common.Identifier.identifier;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.Component.translatable;
 
@@ -35,31 +35,37 @@ final class PlayerTransformer implements Transformer<Player> {
   }
 
   @Override
-  public Result<Player> transform(Command command, Parameter<Player> parameter,
-      Parameters parameters, Arguments arguments) {
+  public Result<Player> transform(
+      Command command, Parameter<Player> parameter, Parameters parameters, Arguments arguments) {
     if (!arguments.hasNext()) {
       return Result.empty();
     }
 
-    return arguments.nextQuotable(parameter)
+    return arguments
+        .nextQuotable(parameter)
         .flatMap(string -> parsePlayer(string, command.context(), parameter));
   }
 
   @SuppressWarnings("unchecked")
   @Override
-  public Stream<String> suggest(Command command, Parameter<Player> parameter, Parameters parameters,
+  public Stream<String> suggest(
+      Command command,
+      Parameter<Player> parameter,
+      Parameters parameters,
       Result<String> argument) {
     if (argument.hasError()) {
       return Stream.of("\"");
     }
 
-    return command.context()
+    return command
+        .context()
         .<CommandSender>expand(identifier("source"))
         .filter(commandSender -> commandSender instanceof Player)
-        .map(commandSender -> server.getOnlinePlayers()
-            .stream()
-            .filter(player -> ((Player) commandSender).canSee(player))
-            .map(Player::getName))
+        .map(
+            commandSender ->
+                server.getOnlinePlayers().stream()
+                    .filter(player -> ((Player) commandSender).canSee(player))
+                    .map(Player::getName))
         .orElseGet(() -> server.getOnlinePlayers().stream().map(Player::getName));
   }
 
@@ -69,22 +75,27 @@ final class PlayerTransformer implements Transformer<Player> {
       try {
         uuid = UUID.fromString(string);
       } catch (IllegalArgumentException e) {
-        return Result.error(new ParameterArgumentException(
-            translatable("player.transform.uuid.invalid", text(string)), parameter));
+        return Result.error(
+            new ParameterArgumentException(
+                translatable("player.transform.uuid.invalid", text(string)), parameter));
       }
       final var player = server.getPlayer(uuid);
-      return makeSureExistsAndVisible(string, context, parameter, player,
-          "player.transform.uuid.unknown");
+      return makeSureExistsAndVisible(
+          string, context, parameter, player, "player.transform.uuid.unknown");
     }
     final var player = server.getPlayer(string);
-    return makeSureExistsAndVisible(string, context, parameter, player,
-        "player.transform.name.unknown");
+    return makeSureExistsAndVisible(
+        string, context, parameter, player, "player.transform.name.unknown");
   }
 
-  private Result<Player> makeSureExistsAndVisible(String string, Context context,
-      Parameter<Player> parameter, Player player, String translation) {
-    if (player == null || (
-        context.expand(identifier("source")).orElse(null) instanceof Player sender
+  private Result<Player> makeSureExistsAndVisible(
+      String string,
+      Context context,
+      Parameter<Player> parameter,
+      Player player,
+      String translation) {
+    if (player == null
+        || (context.expand(identifier("source")).orElse(null) instanceof Player sender
             && !sender.canSee(player))) {
       return Result.error(
           new ParameterArgumentException(translatable(translation, text(string)), parameter));

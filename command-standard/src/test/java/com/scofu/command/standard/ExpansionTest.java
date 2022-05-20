@@ -1,7 +1,7 @@
 package com.scofu.command.standard;
 
 import static com.scofu.command.Context.simpleContext;
-import static com.scofu.command.model.Identifier.identifier;
+import static com.scofu.common.Identifier.identifier;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.google.inject.Inject;
@@ -9,8 +9,8 @@ import com.google.inject.Stage;
 import com.scofu.app.Service;
 import com.scofu.app.bootstrap.BootstrapModule;
 import com.scofu.command.Dispatcher;
-import com.scofu.command.model.Expansion;
 import com.scofu.command.model.Identified;
+import com.scofu.common.Expansion;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
